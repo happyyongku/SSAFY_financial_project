@@ -27,3 +27,11 @@ def login(request):
         'form' : form
     }
     return Response(context, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def logout(request):
+    auth_logout(request)
+    context = {
+        'logout' : True
+    }
+    return Response(context)
