@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'accounts',
+    'financial_product'
     'rest_framwork',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -124,3 +125,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
+
+API_KEY_EXCHANGE = 'PYVJ9YXJHmJ34doctuPppHcELtytYTFH'
+API_KEY_FINANCIAL = '38b5e800e7dfe3b97b9412d34ae804f6'
+API_KEY_STOCK = 'YVBM2TME1QRK3UKO'
