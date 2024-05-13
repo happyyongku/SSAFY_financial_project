@@ -18,5 +18,5 @@ class ArticleSerializer(serializers.ModelSerializer):
     comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
     
     class Meta:
-        model = Article
         fields = '__all__'
+        model = Article
