@@ -8,6 +8,9 @@ import CompareView from '@/views/CompareView.vue'
 import CalculatorView from '@/views/CalculatorView.vue'
 import MapView from '@/views/MapView.vue'
 import ProductRecommendView from '@/views/ProductRecommendView.vue'
+import UserView from '@/views/UserView.vue'
+import UserProfile from '@/components/UserProfile.vue'
+import UserPosts from '@/components/UserPosts.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -56,6 +59,15 @@ const router = createRouter({
       path: '/product_recommend',
       name: 'ProductRecommendView',
       component: ProductRecommendView
+    },
+    {
+      path: '/user/:id',
+      name: 'UserView',
+      component: UserView,
+      children: [
+        { path: 'profile', name: 'user-profile', component: UserProfile },
+        { path: 'posts', name: 'user-posts', component: UserPosts }
+      ]
     }
 
   ]

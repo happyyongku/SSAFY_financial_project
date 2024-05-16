@@ -12,25 +12,28 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <RouterLink :to="{ name: 'ArticleView' }">게시글</RouterLink>
+              <RouterLink :to="{ name: 'ArticleView' }" class="custom-router-link">게시글</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'SignUpView' }">회원가입</RouterLink>
+              <RouterLink :to="{ name: 'SignUpView' }" class="custom-router-link">회원가입</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'LogInView' }">로그인</RouterLink>
+              <RouterLink :to="{ name: 'LogInView' }" class="custom-router-link">로그인</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'CompareView' }">예적금 금리 비교</RouterLink>
+              <RouterLink :to="{ name: 'CompareView' }" class="custom-router-link">예적금 금리 비교</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'CalculatorView' }">신혼 여행을 위한 환율계산기</RouterLink>
+              <RouterLink :to="{ name: 'CalculatorView' }" class="custom-router-link">신혼 여행을 위한 환율계산기</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'MapView' }">내 집 주변 은행 검색</RouterLink>
+              <RouterLink :to="{ name: 'MapView' }" class="custom-router-link">내 집 주변 은행 검색</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'ProductRecommendView' }">나에게 맞는 상품 추천</RouterLink>
+              <RouterLink :to="{ name: 'ProductRecommendView' }" class="custom-router-link">나에게 맞는 상품 추천</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'UserView', params: {'id' : userId } }" class="custom-router-link">나의 프로필</RouterLink>
             </li>
           </ul>
         </div>
@@ -42,6 +45,9 @@
 
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'
+import { ref } from 'vue'
+
+const userId = ref(1)
 </script>
 
 <style scoped>
@@ -51,6 +57,11 @@ import { RouterView, RouterLink } from 'vue-router'
 
 .bg-custom-navbar {
   background-color: #D6B534 ;
+}
+
+.custom-router-link {
+  color: black; 
+  text-decoration: none; 
 }
 
 </style>
