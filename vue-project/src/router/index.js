@@ -4,6 +4,10 @@ import DetailView from '@/views/DetailView.vue'
 import CreateView from '@/views/CreateView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import LogInView from '@/views/LogInView.vue'
+import CompareView from '@/views/CompareView.vue'
+import CalculatorView from '@/views/CalculatorView.vue'
+import MapView from '@/views/MapView.vue'
+import ProductRecommendView from '@/views/ProductRecommendView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +36,28 @@ const router = createRouter({
       path: '/login',
       name: 'LogInView',
       component: LogInView
+    },
+    {
+      path: '/compare',
+      name: 'CompareView',
+      component: CompareView
+    },
+    {
+      path: '/calculator',
+      name: 'CalculatorView',
+      component: CalculatorView
+    },
+    {
+      path: '/map',
+      name: 'MapView',
+      component: MapView
+    },
+    {
+      path: '/product_recommend',
+      name: 'ProductRecommendView',
+      component: ProductRecommendView
     }
+
   ]
 })
 

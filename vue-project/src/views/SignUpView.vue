@@ -1,16 +1,16 @@
 <template>
   <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div class="card" style="width: 24rem;">
-      <div class="card-body">
+      <div class="card-body custom-border">
         <h2 class="card-title text-center">회원가입</h2>
         <form @submit.prevent="signUp">
-          <div data-mdb-input-init id="username-form" class="form-outline mb-4">
+          <div data-mdb-input-init id="username-form" class="form-outline mb-4 custom-border">
             <input type="text" v-model.trim="username" id="username" class="form-control" placeholder="username">
           </div>
-          <div data-mdb-input-init id="password1-form" class="form-outline mb-4">
+          <div data-mdb-input-init id="password1-form" class="form-outline mb-4 custom-border">
             <input type="password" v-model.trim="password1" id="password1" class="form-control" placeholder="password">
           </div>
-          <div data-mdb-input-init id="password2-form" class="form-outline mb-4">
+          <div data-mdb-input-init id="password2-form" class="form-outline mb-4 custom-border">
             <input type="password" v-model.trim="password2" id="password2" class="form-control" placeholder="password confirmation">
           </div>
           <div class="d-flex justify-content-center">
@@ -44,5 +44,9 @@ const signUp = function () {
 <style>
 input {
   text-align: center;
+}
+
+.custom-border {
+  border: 2px solid #D6B534;
 }
 </style>
