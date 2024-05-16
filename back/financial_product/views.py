@@ -50,10 +50,11 @@ def get_data(request):
         url = f'http://finlife.fss.or.kr/finlifeapi/{product_request[idx]}.json'
         response = requests.get(url, params=params_request[idx]).json()['result']
         # ---test ---
-        if idx == 1:
-            test_data = response
+        # if idx == 1:
+        #     test_data = response
         #-------------------------
         if idx == 1:
+            test_data = response
             for product in response['baseList']:
                 fin_cd = product['fin_co_no']
                 if not FinancialCompany.objects.filter(fin_co_no=fin_cd).exists():
