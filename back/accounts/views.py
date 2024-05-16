@@ -1,37 +1,25 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import AuthenticationForm
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from .serializers import UserProfileSerializer, UserProfileEditSerializer
 # Create your views here.
 
-@api_view(['GET','POST'])
-def login(request):
-    if request.mehtod == 'POST':
-        form = AuthenticationForm(request, request.POST)
-        if form.is_valid():
-            auth_login(request, form.get_user())
-            context = {
-                'login' : True
-            }                              # 추후에 True, False 말고 쿠키 데이터를 보내는 것으로 변경해야 함
-            return Response(context)
-        context = {
-            'login' : False
-        }
-        return Response(context)
-    else:
-        form = AuthenticationForm()
-    context = {
-        'form' : form
-    }
-    return Response(context, status=status.HTTP_200_OK)
-
-@api_view(['POST'])
-def logout(request):
-    auth_logout(request)
-    context = {
-        'logout' : True
-    }
-    return Response(context)
+@api_view(['GET','PUT'])
+def profile(request, user_pk):
+    User = get_user_model()
+    user = User.objects.get(pk=user_pk)
+    if request.method == 'GET':       
+        serializer = UserProfileSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'PUT':
+        serializer = UserProfileEditSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            print('confirm')
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_400_BAD_REQUEST)

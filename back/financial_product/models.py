@@ -13,7 +13,7 @@ class DepositProduct(models.Model):
     mtrt_int = models.TextField()
     spcl_cnd = models.TextField()
     join_member = models.TextField()
-    max_limit = models.IntegerField()
+    max_limit = models.IntegerField(null=True)
     etc_note = models.TextField()
     
 class DepositOption(models.Model):
@@ -32,7 +32,7 @@ class InstallmentSavingProduct(models.Model):
     mtrt_int = models.TextField()
     spcl_cnd = models.TextField()
     join_member = models.TextField()
-    max_limit = models.IntegerField()
+    max_limit = models.IntegerField(null=True)
     etc_note = models.TextField()
     
 class InstallmentSavingOption(models.Model):

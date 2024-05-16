@@ -11,16 +11,23 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(DEBUG=(bool, True))
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, '.env')
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-yhl!4=z)nn%zk8+rgev0d(n*%+$ggt61kb9$o1*r9hb6vj-hyh'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -36,18 +43,28 @@ INSTALLED_APPS = [
     'stock',
     'financial_product',
     'rest_framework',
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'corsheaders',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites'
 ]
 
 MIDDLEWARE = [
+    'allauth.account.middleware.AccountMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -80,8 +97,12 @@ WSGI_APPLICATION = 'financial_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'SSAFY_final',
+        'USER': 'yonggu97',
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': 'localhost', # MySQL 호스트
+        'PORT': '3306',      # MySQL 포트 (기본값은 3306)
     }
 }
 
@@ -126,8 +147,55 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 AUTH_USER_MODEL = 'accounts.User'
 
-API_KEY_EXCHANGE = 'PYVJ9YXJHmJ34doctuPppHcELtytYTFH'
-API_KEY_FINANCIAL = '38b5e800e7dfe3b97b9412d34ae804f6'
-API_KEY_STOCK = 'YVBM2TME1QRK3UKO'
+
+REST_FRAMEWORK = {
+    
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+    
+    
+    # 'DEFAULT_AUTHENTICATION_CLASSES':[
+    #     'rest_framework.authentication.BasicAuthentication',
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ],
+}
+
+CORS_ALLOWED_ORIGINS= [
+    'http://127.0.0.1:8000',
+    'http://localhost:5173',
+]
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_CAPITAL_REQUIRED = False
+# ACCOUNT_
+
+REST_AUTH = {
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.CustomUserDetailsSerializer',
+}
+
+ACCOUNT_ADAPTER = 'accounts.models.CustomAccountAdapter'
+
+API_KEY_EXCHANGE = env('API_KEY_EXCHANGE')
+API_KEY_FINANCIAL = env('API_KEY_FINANCIAL')
+
+
+#---------------------------------------------------Celery-------------------------------------------------------
+
+from celery import shared_task
+from celery.schedules import crontab
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_BEAT_SCHEDULE = {
+    'run-every-morning': {
+        'task': 'myapp.tasks.my_task',
+        'schedule': crontab(hour=1, minute=0),  # 매일 오전 1시에 실행
+    },
+}
