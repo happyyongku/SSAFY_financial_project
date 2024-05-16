@@ -6,7 +6,8 @@
       <div id="menu_wrap" class="bg_white">
         <div class="option">
           <div>
-            <input type="text" id="keyword" size="15" placeholder="입력창" class="custom-border" />
+            <input type="text" id="keyword" size="15" placeholder="키워드 입력" class="custom-border" />
+            <input type="text" id="region" size="15" placeholder="지역 입력" class="custom-border" />
             <button @click="searchPlaces" class="custom-border">검색하기</button>
           </div>
         </div>
@@ -34,26 +35,34 @@ export default {
       document.head.appendChild(script);
     },
     initMap() {
-      const mapContainer = document.getElementById("map");
-      const mapOption = {
-        center: new kakao.maps.LatLng(37.566826, 126.9786567), 
-        level: 3,
-      };
+      navigator.geolocation.getCurrentPosition(position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
 
-      this.map = new kakao.maps.Map(mapContainer, mapOption);
-      this.ps = new kakao.maps.services.Places();
-      this.infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
-      this.markers = [];
+        const mapContainer = document.getElementById("map");
+        const mapOption = {
+          center: new kakao.maps.LatLng(latitude, longitude),
+          level: 3,
+        };
+
+        this.map = new kakao.maps.Map(mapContainer, mapOption);
+        this.ps = new kakao.maps.services.Places();
+        this.infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+        this.markers = [];
+      });
     },
     searchPlaces() {
       const keyword = document.getElementById("keyword").value.trim();
+      const region = document.getElementById("region").value.trim(); // 지역 입력 값 가져오기
 
-      if (!keyword) {
-        alert("키워드를 입력해주세요!");
+      if (!keyword || !region) {
+        alert("키워드와 지역을 모두 입력해주세요!");
         return;
       }
 
-      this.ps.keywordSearch(keyword, this.placesSearchCB.bind(this));
+      const query = keyword + ' ' + region; // 지역 정보를 키워드와 합침
+
+      this.ps.keywordSearch(query, this.placesSearchCB.bind(this)); // 합친 쿼리로 검색 수행
     },
     placesSearchCB(data, status, pagination) {
       if (status === kakao.maps.services.Status.OK) {
