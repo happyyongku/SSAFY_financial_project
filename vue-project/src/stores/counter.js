@@ -8,18 +8,14 @@
 //   const API_URL = 'http://127.0.0.1:8000'
 //   const token = ref(null)
 //   const isLogin = computed(() => {
-//     if (token.value === null) {
-//       return false
-//     } else {
-//       return true
-//     }
+//     return token.value !== null
 //   })
 //   const router = useRouter()
 
 //   const getArticles = function () {
 //     axios({
 //       method: 'get',
-//       url: `${API_URL}/api/v1/articles/`,
+//       url: `${API_URL}/article/articles/`,
 //       headers: {
 //         Authorization: `Token ${token.value}`
 //       }
@@ -32,23 +28,38 @@
 //       })
 //   }
 
+//   const getComments = (articlePk) => {
+//     axios({
+//       method: 'get',
+//       url: `${API_URL}/article/${articlePk}/comments/`,
+//       headers: {
+//         Authorization: `Token ${token.value}`,
+//       },
+//     })
+//       .then((response) => {
+//         comments.value = response.data;
+//       })
+//       .catch((error) => {
+//         console.log(error);
+//       });
+//   };
+
 //   const signUp = function (payload) {
 //     const { username, password1, password2 } = payload
 //     axios({
 //       method: 'post',
-//       url: `${API_URL}/accounts/signup/`,
+//       url: `${API_URL}/accounts/registration/`,
 //       data: {
 //         username, password1, password2
 //       }
 //     })
-//      .then((response) => {
-//        console.log('회원가입 성공!')
-//        const password = password1
-//        logIn({ username, password })
-//      })
-//      .catch((error) => {
-//        console.log(error)
-//      })
+//     .then((response) => {
+//       const password = password1
+//       logIn({ username, password })
+//     })
+//     .catch((error) => {
+//       console.log(error)
+//     })
 //   }
 
 //   const logIn = function (payload) {
@@ -66,10 +77,45 @@
 //       })
 //       .catch((error) => {
 //         console.log(error)
+//         window.alert('입력이 제대로 이루어지지 않았습니다.')
 //       })
 //   }
 
-//   return { articles, API_URL, getArticles, signUp, logIn, token, isLogin }
+//   const logOut = function () {
+//     axios({
+//       method: 'post',
+//       url: `${API_URL}/accounts/logout/`,
+//       headers: {
+//         Authorization: `Token ${token.value}`
+//       }
+//     })
+//     .then(() => {
+//       token.value = null
+//       router.push({ name: 'LogInView' })
+//     })
+//     .catch((error) => {
+//       console.log(error)
+//     })
+//   }
+
+//   const deleteAccount = function (userPk) {
+//     axios({
+//       method: 'delete',
+//       url: `${API_URL}/accounts/${userPk}/`,
+//       headers: {
+//         Authorization: `Token ${token.value}`
+//       }
+//     })
+//     .then(() => {
+//       token.value = null
+//       router.push({ name: 'SignUpView' })
+//     })
+//     .catch((error) => {
+//       console.log(error)
+//     })
+//   }
+
+//   return { articles, API_URL, getArticles, getComments, signUp, logIn, logOut, deleteAccount, token, isLogin }
 // }, { persist: true })
 
 import { ref, computed } from 'vue'
@@ -81,6 +127,7 @@ export const useCounterStore = defineStore('counter', () => {
   const articles = ref([])
   const API_URL = 'http://127.0.0.1:8000'
   const token = ref(null)
+  const userId = ref(null)
   const isLogin = computed(() => {
     return token.value !== null
   })
@@ -128,7 +175,6 @@ export const useCounterStore = defineStore('counter', () => {
       }
     })
     .then((response) => {
-      console.log('회원가입 성공!')
       const password = password1
       logIn({ username, password })
     })
@@ -148,35 +194,59 @@ export const useCounterStore = defineStore('counter', () => {
     })
       .then((response) => {
         token.value = response.data.key
+        return axios({
+          method: 'get',
+          url: `${API_URL}/accounts/login/`, // Endpoint to fetch user data
+          headers: {
+            Authorization: `Token ${token.value}`
+          }
+        })
+      })
+      .then((response) => {
+        userId.value = response.data.id // Assuming the user ID is returned in the response
         router.push({ name : 'ArticleView' })
       })
       .catch((error) => {
         console.log(error)
         window.alert('입력이 제대로 이루어지지 않았습니다.')
-      })
+      })  
   }
 
   const logOut = function () {
-    token.value = null
-    router.push({ name: 'LoginView' })
-  }
-
-  const signOut = function () {
     axios({
-      method: 'delete',
-      url: `${API_URL}/accounts/delete/`,
+      method: 'post',
+      url: `${API_URL}/accounts/logout/`,
       headers: {
         Authorization: `Token ${token.value}`
       }
     })
-      .then(() => {
-        token.value = null
-        router.push({ name: 'SignUpView' })
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    .then(() => {
+      token.value = null
+      userId.value = null
+      router.push({ name: 'LogInView' })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
-  return { articles, API_URL, getArticles, getComments, signUp, logIn, logOut, signOut, token, isLogin }
+  const deleteAccount = function () {
+    axios({
+      method: 'delete',
+      url: `${API_URL}/accounts/${userId.value}/`,
+      headers: {
+        Authorization: `Token ${token.value}`
+      }
+    })
+    .then(() => {
+      token.value = null
+      userId.value = null
+      router.push({ name: 'HomeView' })
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
+  return { articles, API_URL, getArticles, getComments, signUp, logIn, logOut, deleteAccount, token, isLogin, userId }
 }, { persist: true })

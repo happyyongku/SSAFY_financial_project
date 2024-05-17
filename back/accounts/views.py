@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from .serializers import UserProfileSerializer, UserProfileEditSerializer
 # Create your views here.
 
-@api_view(['GET','PUT'])
+@api_view(['GET','PUT', 'DELETE'])
 def profile(request, user_pk):
     User = get_user_model()
     user = User.objects.get(pk=user_pk)
@@ -22,4 +22,7 @@ def profile(request, user_pk):
             print('confirm')
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'DELETE':
+        user.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)
