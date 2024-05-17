@@ -19,17 +19,19 @@
 import axios from 'axios'
 import { ref } from 'vue'
 import { useCounterStore } from '@/stores/counter'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const store = useCounterStore()
 const title = ref(null)
 const content = ref(null)
 const router = useRouter()
+const route = useRoute()
 
 const createArticle = function () {
+  console.log(route)
   axios({
     method: 'post',
-    url: `${store.API_URL}/api/v1/articles/`,
+    url: `${store.API_URL}/article/articles/`,
     data: {
       title: title.value,
       content: content.value
@@ -44,6 +46,7 @@ const createArticle = function () {
     })
     .catch((error) => {
       console.log(error)
+      console.log(route.params)
     })
 }
 
