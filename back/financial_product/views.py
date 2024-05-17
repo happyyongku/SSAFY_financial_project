@@ -360,3 +360,9 @@ def search(request):
                 options = product.installmentsavingoption_sett.all()
                 serializer = InstallmentSavingOptionSerializer(data=options, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
+            
+@api_view(['GET'])
+def get_bank_list(request):
+    banks = FinancialCompany.objects.all()
+    serializer = FinancialCompanySerializer(banks, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
