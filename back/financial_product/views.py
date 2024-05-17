@@ -328,3 +328,40 @@ def get_exchange_data(request):
                             )
     
     return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def search(request):
+    params = request.params
+    if params['search_type']== 'deposit':
+        if not params['target_bank']:
+            bank = FinancialCompany.objects.all()
+            serializer = FinancialCompanySerializer(data=bank, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            bank = FinancialCompany.objects.get(pk=params['target_bank'])
+            if not params['target_product']:
+                product = bank.depositproduct_set.all()
+                serializer = DepositProductSerializer(data=product, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                product = DepositProduct.objects.get(pk = params['target_product'])
+                options = product.depositoption_set.all()
+                serializer = DepositOptionSerializer(data=options, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+                
+    elif params['search_type'] == 'installment':
+        if not params['target_bank']:
+            bank = FinancialCompany.objects.all()
+            serializer = FinancialCompanySerializer(data=bank, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            bank = FinancialCompany.objects.get(pk=params['target_bank'])
+            if not params['target_product']:
+                product = bank.installmentsavingproduct_set.all()
+                serializer = InstallmentSavingProductSerializer(data=product, many=True)
+                return Response(serializer.data, many=True)
+            else:
+                product = InstallmentSavingProduct.objects.get(pk = params['target_product'])
+                options = product.installmentsavingoption_sett.all()
+                serializer = InstallmentSavingOptionSerializer(data=options, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
