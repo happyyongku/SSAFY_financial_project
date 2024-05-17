@@ -1,9 +1,8 @@
 <template>
   <div>
-    <RouterLink :to="{ name: 'user-profile' }" class="custom-router-link">Profile</RouterLink> 
-    <RouterLink :to="{ name: 'user-posts' }" class="custom-router-link">Posts</RouterLink>
-    <h1>유저 페이지</h1>
-    <h2>{{ userId }}번 user 페이지</h2>
+    <RouterLink :to="{ name: 'user-profile' }" class="custom-router-link">나의 프로필 보기</RouterLink> 
+    <RouterLink :to="{ name: 'user-posts' }" class="custom-router-link">나의 게시글 보기</RouterLink>
+    <h1>{{ userId }}번 유저 페이지</h1>
     <hr>
     <RouterView />
   </div>
