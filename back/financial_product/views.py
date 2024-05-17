@@ -32,7 +32,7 @@ from .serializers import (
 @api_view(['GET'])
 def get_financial_data(request):
     api_key = settings.API_KEY_FINANCIAL
-    product_request = ['depositProductsSearch', 'savingProductsSearch', 'annuitySavingProductsSearch']
+    product_request = ['depositProductsSearch', 'savingProductsSearch']
     params_request = [
         {
             'auth':api_key,
@@ -44,11 +44,6 @@ def get_financial_data(request):
             'topFinGrpNo':'020000',
             'pageNo':1,
         },
-        {
-            'auth':api_key,
-            'topFinGrpNo':'060000',
-            'pageNo':1
-        }
     ]
     for idx in range(len(product_request)):
         url = f'http://finlife.fss.or.kr/finlifeapi/{product_request[idx]}.json'
