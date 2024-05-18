@@ -10,21 +10,36 @@ export const useFinancialStore = defineStore('financial', () => {
     const selectedType = ref(null)
     const bankList = ref([])
     const selectedBank1 = ref(null)
+    const bank1 = ref(null)
     const selectedBank2 = ref(null)
+    const bank2 = ref(null)
     const productList1 = ref([])
     const selectedProduct1 = ref(null)
+    const product1 = ref(null)
     const productList2 = ref([])
     const selectedProduct2 = ref(null)
+    const product2 = ref(null)
     const optionList1 = ref([])
     const selectedOption1 = ref(null)
     const optionList2 = ref([])
     const selectedOption2 = ref(null)
+    const option1 = ref(null)
+    const option2 = ref(null)
     const URL = 'http://127.0.0.1:8000'
     const token= ref(useCounterStore().token)
 
+    // const switchBankName = function(side){
+    //     if (side === 1){
+    //         axios({
+    //             url:`${URL}/financial_product/search/bank/${selectedBank1.value}/`,
+    //             method:'get'
+    //         })
+    //     }
+    // }
+
     const getBankList = function(){
         axios({
-            url: `${URL}/financial_product/search/bank/`,
+            url: `${URL}/financial_product/search/bank_list/`,
             method:'get',
             headers: {
                 Authorization: `Token ${token.value}`
@@ -46,8 +61,8 @@ export const useFinancialStore = defineStore('financial', () => {
             })
             .then(response => {
                 productList1.value = response.data
-                console.log(`productList1 : ${productList1.value}`)
-                console.log(response.data)
+                bank1.value = productList1.value[0].kor_co_nm
+                console.log(`bank1 : ${bank1.value}`)
             })
             .catch(err => {
                 console.log(err)
@@ -55,11 +70,41 @@ export const useFinancialStore = defineStore('financial', () => {
         }
         else if (side === 2){
             axios({
-                url:`${URL}/financial_product/search/product/${selectedType.value}/${selectedBank2.value}/`
+                url:`${URL}/financial_product/search/product/${selectedType.value}/${selectedBank2.value}/`,
+                method:'get'
             })
             .then(response => {
                 productList2.value = response.data
-                console.log(`productList2 : ${productList2.value}`)
+                bank2.value = productList2.value[0].kor_co_nm
+                console.log(`bank2 : ${bank2.value}`)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    }
+
+    const getOptionList = function(side){
+        if (side === 1){
+            axios({
+                url:`${URL}/financial_product/search/option/${selectedType.value}/${selectedProduct1.value}/`,
+                method:'get'
+            })
+            .then(response => {
+                optionList1.value = response.data
+                console.log(optionList1.value)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+        else if (side === 2){
+            axios({
+                url:`${URL}/financial_product/search/option/${selectedType.value}/${selectedProduct2.value}/`
+            })
+            .then(response => {
+                optionList2.value = response.data
+                console.log(optionList2.value)
             })
             .catch(err => {
                 console.log(err)
@@ -85,18 +130,25 @@ export const useFinancialStore = defineStore('financial', () => {
     return { 
         selectedType, 
         bankList, 
-        selectedBank1, 
-        selectedBank2, 
+        selectedBank1,
+        bank1,
+        selectedBank2,
+        bank2,
         productList1, 
-        selectedProduct1, 
+        selectedProduct1,
+        product1, 
         productList2, 
-        selectedProduct2, 
+        selectedProduct2,
+        product2, 
         optionList1, 
         selectedOption1, 
         optionList2, 
-        selectedOption2, 
+        selectedOption2,
+        option1,
+        option2,
         getBankList,
         getProductList,
-        storeInitialize
+        storeInitialize,
+        getOptionList
     }
 })

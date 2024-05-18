@@ -20,7 +20,6 @@
     const selected = ref(null)
     const selectChange = (event) => {
         selected.value = event.target.value
-        console.log(selected.value)
     }
 
 </script>

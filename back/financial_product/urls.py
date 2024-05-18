@@ -6,6 +6,8 @@ urlpatterns = [
     path('check/', views.check_data),
     path('get_exchange_data/', views.get_exchange_data),
     # path('search/', views.search),
-    path('search/bank/', views.get_bank_list),
-    path('search/product/<str:type>/<int:bank_id>/', views.get_product_list)
+    # path('search/bank/<int:bank_id>/', views.get_bank),
+    path('search/bank_list/', views.get_bank_list),
+    path('search/product/<str:type>/<int:bank_id>/', views.get_product_list),
+    path('search/option/<str:type>/<int:product_id>/', views.get_option_list)
 ]

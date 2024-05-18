@@ -73,6 +73,7 @@ def get_financial_data(request):
                         
                         d_product_data = {
                             'fin_co_no': company,  # ForeignKey relationship
+                            'kor_co_nm': product['kor_co_nm'],
                             'fin_prdt_cd': product['fin_prdt_cd'],
                             'fin_prdt_nm': product['fin_prdt_nm'],
                             'mtrt_int': product['mtrt_int'],
@@ -139,6 +140,7 @@ def get_financial_data(request):
                         
                         i_product_data = {
                             'fin_co_no': company,  # ForeignKey relationship
+                            'kor_co_nm': product['kor_co_nm'],
                             'fin_prdt_cd': product['fin_prdt_cd'],
                             'fin_prdt_nm': product['fin_prdt_nm'],
                             'mtrt_int': product['mtrt_int'],
@@ -294,4 +296,22 @@ def get_product_list(request, type, bank_id):
         products = bank.depositproduct_set.all()
         serializer = DepositProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+    elif type == 'installment':
+        products = bank.installmentsavingproduct_set.all()
+        serializer = InstallmentSavingProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_option_list(request, type, product_id):
+    print('////////////////////////////////////////////')
+    if type == 'deposit':
+        product = DepositProduct.objects.get(pk=product_id)
+        options = product.depositoption_set.all()
+        serializer = DepositOptionSerializer(options, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif type == 'installment':
+        product = InstallmentSavingProduct.objects.get(pk=product_id)
+        options = product.installmentsavingoption_set.all()
+        serializer = InstallmentSavingOptionSerializer(options, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        

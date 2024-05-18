@@ -8,6 +8,7 @@ class FinancialCompany(models.Model):
 
 class DepositProduct(models.Model):
     fin_co_no = models.ForeignKey(FinancialCompany, on_delete=models.CASCADE)
+    kor_co_nm = models.TextField()
     fin_prdt_cd = models.TextField()
     fin_prdt_nm = models.TextField()
     mtrt_int = models.TextField()
@@ -28,6 +29,7 @@ class DepositOption(models.Model):
     
 class InstallmentSavingProduct(models.Model):
     fin_co_no = models.ForeignKey(FinancialCompany, on_delete=models.CASCADE)
+    kor_co_nm = models.TextField()
     fin_prdt_cd = models.TextField()
     fin_prdt_nm = models.TextField()
     mtrt_int = models.TextField()
