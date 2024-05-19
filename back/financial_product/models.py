@@ -83,7 +83,7 @@ class PensionOption(models.Model):
     dcls_month = models.CharField(max_length=10)
     
 class ExchangRate(models.Model):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     cur_unit = models.CharField(max_length=10)
     cur_nm = models.CharField(max_length=30)
     ttb = models.FloatField()

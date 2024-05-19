@@ -57,7 +57,10 @@ export const useFinancialStore = defineStore('financial', () => {
         if (side === 1){
             axios({
                 url:`${URL}/financial_product/search/product/${selectedType.value}/${selectedBank1.value}/`,
-                method:'get'
+                method:'get',
+                headers: {
+                    Authorization: `Token ${token.value}`
+                    }
             })
             .then(response => {
                 productList1.value = response.data
@@ -71,7 +74,10 @@ export const useFinancialStore = defineStore('financial', () => {
         else if (side === 2){
             axios({
                 url:`${URL}/financial_product/search/product/${selectedType.value}/${selectedBank2.value}/`,
-                method:'get'
+                method:'get',
+                headers: {
+                    Authorization: `Token ${token.value}`
+                    }
             })
             .then(response => {
                 productList2.value = response.data
@@ -88,7 +94,10 @@ export const useFinancialStore = defineStore('financial', () => {
         if (side === 1){
             axios({
                 url:`${URL}/financial_product/search/option/${selectedType.value}/${selectedProduct1.value}/`,
-                method:'get'
+                method:'get',
+                headers: {
+                    Authorization: `Token ${token.value}`
+                    }
             })
             .then(response => {
                 optionList1.value = response.data
@@ -100,7 +109,11 @@ export const useFinancialStore = defineStore('financial', () => {
         }
         else if (side === 2){
             axios({
-                url:`${URL}/financial_product/search/option/${selectedType.value}/${selectedProduct2.value}/`
+                url:`${URL}/financial_product/search/option/${selectedType.value}/${selectedProduct2.value}/`,
+                method:'get',
+                headers: {
+                    Authorization: `Token ${token.value}`
+                    }
             })
             .then(response => {
                 optionList2.value = response.data
@@ -150,5 +163,78 @@ export const useFinancialStore = defineStore('financial', () => {
         getProductList,
         storeInitialize,
         getOptionList
+    }
+})
+
+export const useExchangeStore = defineStore('exchange', () => {
+    const currentExchange = ref([]) // 해당 날짜의 환율 정보
+    const targetDate = ref('0000-00-00')
+    const currentDate = ref(null)
+    const tradeType = ref('sell')
+    const dateList = ref([])
+    const URL = 'http://127.0.0.1:8000'
+    const token= ref(useCounterStore().token)
+    const korWon = ref(null)
+    const tradeMoney = ref(null)
+    const tradeCurrent = ref(null)
+    const selectedCurrent = ref(null)
+    const result = ref(null)
+    
+    const getToday = function(){
+        const today = new Date()
+        const formattedToday = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate()
+        currentDate.value = formattedToday
+        console.log(currentDate.value)
+    }
+    const switchTrade = function(){
+        tradeType.value = tradeType.value === 'buy' ? 'sell':'buy'
+        console.log('switch')
+    }
+
+    const getTargetRate = function(target){
+        axios({
+            url:`${URL}/financial_product/get_rate/${target}/`,
+            method:'get',
+            headers: {
+                Authorization: `Token ${token.value}`
+                }
+        })
+        .then(response => {
+            currentExchange.value = response.data
+        })
+    }
+
+    const getDateList = function(){
+        for (let i=-1; i<30; i++){
+            const curDate = new Date(currentDate.value)
+            curDate.setDate(curDate.getDate() - i)
+            dateList.value.push(curDate.toISOString().split('T')[0])
+            }
+            console.log(dateList.value)
+        return dateList
+    }
+    const initialize = function(){
+        korWon.value = null
+        tradeMoney.value = null
+        result.value = null
+    }
+
+    return {
+        currentDate,
+        targetDate,
+        currentExchange,
+        tradeType,
+        dateList,
+        korWon,
+        tradeCurrent,
+        selectedCurrent,
+        result,
+        tradeMoney,
+        getDateList,
+        getToday,
+        getTargetRate,
+        getDateList,
+        switchTrade,
+        initialize
     }
 })

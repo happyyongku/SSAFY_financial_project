@@ -5,15 +5,13 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 import pandas as pd
-from datetime import date
+from datetime import date, datetime, timedelta
 from .models import (
     FinancialCompany, 
     DepositOption, 
     DepositProduct, 
     InstallmentSavingOption,
     InstallmentSavingProduct,
-    PensionOption,
-    PensionProduct,
     ExchangRate
     )
 from .serializers import (
@@ -22,14 +20,12 @@ from .serializers import (
     DepositProductSerializer,
     InstallmentSavingOptionSerializer,
     InstallmentSavingProductSerializer,
-    PensionOptionSerializer,
-    PensionProductSerializer,
     ExchangeRateSerializer
 )
 
 # Create your views here.
 
-@api_view(['GET'])
+@api_view(['POST'])
 def get_financial_data(request):
     api_key = settings.API_KEY_FINANCIAL
     product_request = ['depositProductsSearch', 'savingProductsSearch']
@@ -196,42 +192,38 @@ def check_data(request):
     deposit_o = DepositOption.objects.all()
     install_p = InstallmentSavingProduct.objects.all()
     install_o = InstallmentSavingProduct.objects.all()
-    pension_p = PensionProduct.objects.all()
-    pension_o = PensionOption.objects.all()
+
     
     df_d_p = pd.DataFrame(list(deposit_p.values()))
     df_d_o = pd.DataFrame(list(deposit_o.values()))
     df_i_p = pd.DataFrame(list(install_p.values()))
     df_i_o = pd.DataFrame(list(install_o.values()))
-    df_p_p = pd.DataFrame(list(pension_p.values()))
-    df_p_o = pd.DataFrame(list(pension_o.values()))
-    
     dupldict = {
         'd_p' : df_d_p.duplicated().sum(),
         'd_o' : df_d_o.duplicated().sum(),
         'i_p' : df_i_p.duplicated().sum(),
         'i_o' : df_i_o.duplicated().sum(),
-        'p_p' : df_p_p.duplicated().sum(),
-        'p_o' : df_p_o.duplicated().sum(),
+
     }
     return Response(dupldict)
     
-@api_view(['GET'])
+@api_view(['POST'])
 def get_exchange_data(request):
     url = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON'
     api_key = settings.API_KEY_EXCHANGE
     params = {
         'authkey': api_key,
-        'data': 'AP01'
+        'data': 'AP01',
+
     }
     today = date.today()
-    print(today)
     response = requests.get(url, params=params).json()
     for rate in response:
         ttb_str = rate['ttb'].replace(',','')
         tts_str = rate['tts'].replace(',','')
         deal_str = rate['deal_bas_r'].replace(',','')
         rate_data = {
+            'date':today,
             'cur_unit': rate['cur_unit'],
             'cur_nm': rate['cur_nm'],
             'ttb': float(ttb_str),
@@ -246,42 +238,52 @@ def get_exchange_data(request):
     
     return Response(status=status.HTTP_200_OK)
 
-# @api_view(['GET'])
-# def search(request):
-#     params = request.params
-#     if params['search_type']== 'deposit':
-#         if not params['target_bank']:
-#             bank = FinancialCompany.objects.all()
-#             serializer = FinancialCompanySerializer(data=bank, many=True)
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         else:
-#             bank = FinancialCompany.objects.get(pk=params['target_bank'])
-#             if not params['target_product']:
-#                 product = bank.depositproduct_set.all()
-#                 serializer = DepositProductSerializer(data=product, many=True)
-#                 return Response(serializer.data, status=status.HTTP_200_OK)
-#             else:
-#                 product = DepositProduct.objects.get(pk = params['target_product'])
-#                 options = product.depositoption_set.all()
-#                 serializer = DepositOptionSerializer(data=options, many=True)
-#                 return Response(serializer.data, status=status.HTTP_200_OK)
-                
-#     elif params['search_type'] == 'installment':
-#         if not params['target_bank']:
-#             bank = FinancialCompany.objects.all()
-#             serializer = FinancialCompanySerializer(data=bank, many=True)
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         else:
-#             bank = FinancialCompany.objects.get(pk=params['target_bank'])
-#             if not params['target_product']:
-#                 product = bank.installmentsavingproduct_set.all()
-#                 serializer = InstallmentSavingProductSerializer(data=product, many=True)
-#                 return Response(serializer.data, many=True)
-#             else:
-#                 product = InstallmentSavingProduct.objects.get(pk = params['target_product'])
-#                 options = product.installmentsavingoption_sett.all()
-#                 serializer = InstallmentSavingOptionSerializer(data=options, many=True)
-#                 return Response(serializer.data, status=status.HTTP_200_OK)
+@api_view(['POST'])
+def get_exchange_term_data(request, start_date):
+    url = 'https://www.koreaexim.go.kr/site/program/financial/exchangeJSON'
+    api_key = settings.API_KEY_EXCHANGE
+    params = {
+        'authkey': api_key,
+        'searchdate': None,
+        'data': 'AP01'
+    }
+    now = datetime.now()
+    
+    start = datetime.strptime(start_date, "%Y-%m-%d")
+    date_list = [(start + timedelta(days=i)).strftime("%Y-%m-%d") for i in range((now - start).days + 1)]
+    
+    for cur_date in date_list:
+        params['searchdate'] = cur_date
+        response = requests.get(url, params=params).json()
+        print(response)
+        if not response:
+            continue
+        for rate in response:
+            ttb_str = rate['ttb'].replace(',','')
+            tts_str = rate['tts'].replace(',','')
+            deal_str = rate['deal_bas_r'].replace(',','')
+            rate_data = {
+                'date':cur_date,
+                'cur_unit': rate['cur_unit'],
+                'cur_nm': rate['cur_nm'],
+                'ttb': float(ttb_str),
+                'tts': float(tts_str),
+                'deal_bas_r': float(deal_str)
+            }
+            ExchangRate.objects.update_or_create(
+                                    cur_unit=rate['cur_unit'],
+                                    date = cur_date,
+                                    defaults=rate_data
+                                )
+    
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_rate(request, date):
+    rate = ExchangRate.objects.filter(date=date)
+    serializer = ExchangeRateSerializer(rate, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    
             
 @api_view(['GET'])
 def get_bank_list(request):
