@@ -11,6 +11,9 @@ import ProductRecommendView from '@/views/ProductRecommendView.vue'
 import UserView from '@/views/UserView.vue'
 import UserProfile from '@/components/UserProfile.vue'
 import UserPosts from '@/components/UserPosts.vue'
+import CommentForm from '@/components/CommentForm.vue'
+import CommentEdit from '@/components/CommentEdit.vue'
+import ArticleEdit from '@/components/ArticleEdit.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -68,6 +71,21 @@ const router = createRouter({
         { path: 'profile', name: 'user-profile', component: UserProfile },
         { path: 'posts', name: 'user-posts', component: UserPosts }
       ]
+    },
+    {
+      path: '/article/:id/comment',
+      name: 'CommentForm',
+      component: CommentForm,
+    },
+    {
+      path: '/article/:articleId/comment/:commentId/edit',
+      name: 'CommentEdit',
+      component: CommentEdit,
+    },
+    {
+      path: '/article/:id/edit',
+      name: 'ArticleEdit',
+      component: ArticleEdit,
     }
 
   ]
