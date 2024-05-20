@@ -114,13 +114,9 @@ export default {
       const itemStr = `
         <span class="markerbg marker_${index + 1}"></span>
         <div class="info">
-          <h5>${index + 1}. ${place.place_name}</h5>
-          <div>
-            <span>${place.road_address_name ? place.road_address_name : place.address_name}</span>
-          </div>
-          <div>
-            <span class="tel">${place.phone}</span>
-          </div>
+          <h5>${place.place_name}</h5>
+          ${place.road_address_name ? `<span>${place.road_address_name}</span><span class="jibun gray">${place.address_name}</span>` : `<span>${place.address_name}</span>`}
+          <span class="tel">${place.phone}</span>
         </div>
       `;
       el.innerHTML = itemStr;
@@ -200,15 +196,6 @@ export default {
 #placesList .item {
   padding: 10px;
   border-bottom: 1px solid #e2e2e2;
-  line-height: 1.5; /* 줄 간격 조정 */
-}
-#placesList .info {
-  margin-left: 10px; /* 정보 항목에 좌측 여백 추가 */
-}
-#placesList .tel {
-  display: block; /* 전화번호를 별도의 줄로 표시 */
-  margin-top: 5px; /* 상단 여백 추가 */
-  color: #007bff; /* 전화번호 색상 변경 */
 }
 #pagination a {
   margin: 0 2px;
@@ -232,4 +219,3 @@ export default {
   margin: 2px;
 }
 </style>
-

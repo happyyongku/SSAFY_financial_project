@@ -8,6 +8,7 @@ class FinancialCompany(models.Model):
 
 class DepositProduct(models.Model):
     fin_co_no = models.ForeignKey(FinancialCompany, on_delete=models.CASCADE)
+    kor_co_nm = models.TextField()
     fin_prdt_cd = models.TextField()
     fin_prdt_nm = models.TextField()
     mtrt_int = models.TextField()
@@ -28,6 +29,7 @@ class DepositOption(models.Model):
     
 class InstallmentSavingProduct(models.Model):
     fin_co_no = models.ForeignKey(FinancialCompany, on_delete=models.CASCADE)
+    kor_co_nm = models.TextField()
     fin_prdt_cd = models.TextField()
     fin_prdt_nm = models.TextField()
     mtrt_int = models.TextField()
@@ -81,7 +83,7 @@ class PensionOption(models.Model):
     dcls_month = models.CharField(max_length=10)
     
 class ExchangRate(models.Model):
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField()
     cur_unit = models.CharField(max_length=10)
     cur_nm = models.CharField(max_length=30)
     ttb = models.FloatField()

@@ -99,8 +99,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SSAFY_final',
-        'USER': 'root',
-        'PASSWORD': '0000',
+        'USER': 'yonggu97',
+        'PASSWORD': env('DB_PASSWORD'),
         'HOST': 'localhost', # MySQL 호스트
         'PORT': '3306',      # MySQL 포트 (기본값은 3306)
     }
@@ -155,7 +155,10 @@ REST_FRAMEWORK = {
     
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.AllowAny'
+    ]
     
     
     # 'DEFAULT_AUTHENTICATION_CLASSES':[
@@ -183,6 +186,7 @@ ACCOUNT_ADAPTER = 'accounts.models.CustomAccountAdapter'
 
 API_KEY_EXCHANGE = env('API_KEY_EXCHANGE')
 API_KEY_FINANCIAL = env('API_KEY_FINANCIAL')
+API_KEY_AI = env('API_KEY_GPT')
 
 
 #---------------------------------------------------Celery-------------------------------------------------------

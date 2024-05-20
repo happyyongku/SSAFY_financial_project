@@ -11,9 +11,8 @@ import ProductRecommendView from '@/views/ProductRecommendView.vue'
 import UserView from '@/views/UserView.vue'
 import UserProfile from '@/components/UserProfile.vue'
 import UserPosts from '@/components/UserPosts.vue'
-import CommentForm from '@/components/CommentForm.vue'
-import CommentEdit from '@/components/CommentEdit.vue'
-import ArticleEdit from '@/components/ArticleEdit.vue'
+import ExchangeCalculator from '@/views/ExchangeCalculator.vue'
+import ChatBotView from '@/views/ChatBotView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,29 +72,28 @@ const router = createRouter({
       ]
     },
     {
-      path: '/article/:id/comment',
-      name: 'CommentForm',
-      component: CommentForm,
+      path: '/exchange-calculrator',
+      name: 'ExchangeView',
+      component: ExchangeCalculator,
     },
     {
-      path: '/article/:articleId/comment/:commentId/edit',
-      name: 'CommentEdit',
-      component: CommentEdit,
-    },
-    {
-      path: '/article/:id/edit',
-      name: 'ArticleEdit',
-      component: ArticleEdit,
+      path: '/chatbot',
+      name: 'ChatBotView',
+      component: ChatBotView
     }
 
   ]
 })
 
 import { useCounterStore } from '@/stores/counter'
+import { useExchangeStore } from '@/stores/financial'
+import axios from 'axios'
 
 
 router.beforeEach((to, from) => {
   const store = useCounterStore()
+  const exchangeStore = useExchangeStore()
+
   if (to.name === 'ArticleView' && store.isLogin === false) {
     window.alert('로그인이 필요합니다.')
     return { name: 'LogInView' }
@@ -107,6 +105,23 @@ router.beforeEach((to, from) => {
   if ((to.name === 'SignUpView' || to.name === 'LogInView') && (store.isLogin === true)) {
     window.alert('이미 로그인 했습니다.')
     return { name: 'ArticleView' }
+  }
+
+  if (to.name === 'ExchangeView') {
+    exchangeStore.getToday()
+    console.log('///////////')
+    exchangeStore.getTargetRate(exchangeStore.currentDate)
+    exchangeStore.getDateList()
+  }
+
+  if (to.name === 'ChatBotView'){
+    axios({
+      url:'http://127.0.0.1:8000/financial_product/chat/initialize/',
+      method: 'post'
+    })
+    .then(res => {
+      console.log('initialized')
+    })
   }
 })
 

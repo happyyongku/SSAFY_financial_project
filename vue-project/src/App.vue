@@ -24,16 +24,21 @@
               <RouterLink :to="{ name: 'CompareView' }" class="custom-router-link">예적금 금리 비교</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'CalculatorView' }" class="custom-router-link">신혼 여행을 위한 환율계산기</RouterLink>
+              <RouterLink :to="{ name: 'ExchangeView' }" class="custom-router-link">신혼 여행을 위한 환율계산기</RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink :to="{ name: 'MapView' }" class="custom-router-link">내 집 주변 은행 검색</RouterLink>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <RouterLink :to="{ name: 'ProductRecommendView' }" class="custom-router-link">나에게 맞는 상품 추천</RouterLink>
+            </li> -->
+            <li class="nav-item">
+              <RouterLink :to="{ name: 'UserView', params: {'id' : userId } }" class="custom-router-link">나의 프로필</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'UserView', params: { id: userId || 0 } }" class="custom-router-link">나의 프로필</RouterLink>
+              <RouterLink :to="{name: 'ChatBotView'}" class="custom-router-link">
+                챗봇 상품 추천
+              </RouterLink>
             </li>
           </ul>
         </div>
@@ -43,19 +48,17 @@
   <RouterView />
 </template>
 
+
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'
-import { ref, computed, onMounted } from 'vue'
-import { useCounterStore } from '@/stores/counter'
+import { ref } from 'vue'
 
-const counterStore = useCounterStore()
-const userId = computed(() => counterStore.userId)
+const userId = ref(1)
+const chatBot = ref(false)
+const switchChat = function(){
+  chatBot.value = chatBot.value===false?true:false
+}
 
-onMounted(() => {
-  if (counterStore.isLogin) {
-    userId.value = counterStore.userId
-  }
-})
 </script>
 
 <style scoped>
@@ -71,4 +74,5 @@ onMounted(() => {
   color: black; 
   text-decoration: none; 
 }
+
 </style>
