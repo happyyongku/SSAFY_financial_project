@@ -24,7 +24,7 @@
               <RouterLink :to="{ name: 'CompareView' }" class="custom-router-link">예적금 금리 비교</RouterLink>
             </li>
             <li class="nav-item">
-              <RouterLink :to="{ name: 'CalculatorView' }" class="custom-router-link">신혼 여행을 위한 환율계산기</RouterLink>
+              <RouterLink :to="{ name: 'ExchangeView' }" class="custom-router-link">신혼 여행을 위한 환율계산기</RouterLink>
             </li>
             <li class="nav-item">
               <RouterLink :to="{ name: 'MapView' }" class="custom-router-link">내 집 주변 은행 검색</RouterLink>
