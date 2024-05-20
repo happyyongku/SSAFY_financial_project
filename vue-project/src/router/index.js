@@ -13,6 +13,7 @@ import UserProfile from '@/components/UserProfile.vue'
 import UserPosts from '@/components/UserPosts.vue'
 import ExchangeCalculator from '@/views/ExchangeCalculator.vue'
 import ChatBotView from '@/views/ChatBotView.vue'
+import ArticleEdit from '@/components/ArticleEdit.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +81,11 @@ const router = createRouter({
       path: '/chatbot',
       name: 'ChatBotView',
       component: ChatBotView
+    },
+    {
+      path: '/articles/:id/edit',
+      name: 'ArticleEdit',
+      componet: ArticleEdit
     }
 
   ]
