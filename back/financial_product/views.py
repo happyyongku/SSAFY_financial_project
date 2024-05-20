@@ -7,6 +7,7 @@ from rest_framework import status
 import pandas as pd
 from openai import OpenAI
 from datetime import date, datetime, timedelta
+import pymysql
 import json
 from .models import (
     FinancialCompany, 
@@ -341,9 +342,46 @@ def fetch_product(request, type):
 
 
 # DB 내의 상품과 옵션 데이터를 fixture (json이나 csv)로 만들고 아래 코드로 읽어서 bank_info에 넣기
-bank_info = []
+company_info = []
+deposit_info = []
+installment_info = []
 # with open('파일경로', 'r', encoding='utf-8') as f :
 #     text = f.read()
+conn = pymysql.connect(
+    host='localhost',
+    user='yonggu97',
+    password = settings.DB_PASSWORD,
+    db = 'ssafy_final'
+)
+cursor = conn.cursor()
+db_list = [
+    'financial_product_financialcompany',
+    # 'financial_product_depositoption',
+    'financial_product_depositproduct',
+    # 'financial_product_installmentsavingoption',
+    'financial_product_installmentsavingproduct'
+    ]
+
+for db in db_list:
+    if 'company' in db:
+        cursor.execute(f"SELECT * FROM {db}")
+    else :
+        cursor.execute(f'SELECT kor_co_nm,  mtrt_int FROM {db}')
+        
+    rows = cursor.fetchall()
+    columns = [description[0] for description in cursor.description]
+    df = pd.DataFrame(rows, columns=columns)
+    json_data = df.to_json(orient='records', force_ascii=False)
+    if 'company' in db:
+        company_info.append(json.loads(json_data))
+    elif 'deposit' in db:
+        deposit_info.append(json.loads(json_data))
+    elif 'installment' in db:
+        installment_info.append(json.loads(json_data))
+
+conn.close()
+
+
 @api_view(['GET'])
 def chatAI(request):
     global chat_history
@@ -352,13 +390,26 @@ def chatAI(request):
     client = OpenAI(api_key=API_KEY)
     input_message = request.query_params.get('message','')
     print(input_message)
-    
+    #아래 정보에 기반해서 답변해줘야해 {bank_info}
     chat_history.extend(
         [
-            {"role": "user", "content": f"{input_message} 그리고 한글로 꼭 대답해주고 아래 정보에 기반해서 답변해줘야해 {bank_info}"},
-            
+            {"role": "user", "content": f"{input_message}"},
+            {"role": "system", "content": f"반드시 한글로 대답해줘."}
         ] 
     )
+    
+    if '은행' in input_message and '추천' in input_message:
+        chat_history.append(
+            {"role": "system", "content": f"만약 은행을 추천한다면 아래 정보에 기반해서 한글로 답변해줘. {company_info}"}
+        )
+    if '예금' in input_message and '추천' in input_message:
+        chat_history.append(
+            {"role": "system", "content": f"만약 예금 상품을 추천한다면 아래 정보에 기반해서 예금 상품의 이름과 함께 정보를 한글로 답변해줘. {deposit_info} 예금 상품의 이름은 각 딕셔너리 내의 'fin_prdt_nm'의 값이야. " }
+        )
+    if '적금' in input_message and '추천' in input_message:
+        chat_history.append(
+            {"role": "system", "content": f"만약 적금 상품을 추천한다면 아래 정보에 기반해서 적금 상품의 이름과 함께 정보를 한글로 답변해줘. {installment_info} 적금 상품의 이름은 각 딕셔너리 내의 'fin_prdt_nm'의 값이야."}
+        )
     
     try:
         response = client.chat.completions.create(
