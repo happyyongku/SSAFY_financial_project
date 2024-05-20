@@ -218,7 +218,12 @@ def get_exchange_data(request):
     }
     today = date.today()
     response = requests.get(url, params=params).json()
+    if not response:
+        return
+    
     for rate in response:
+        if rate['cur_unit'] == 'KRW':
+                continue
         ttb_str = rate['ttb'].replace(',','')
         tts_str = rate['tts'].replace(',','')
         deal_str = rate['deal_bas_r'].replace(',','')
@@ -259,6 +264,8 @@ def get_exchange_term_data(request, start_date):
         if not response:
             continue
         for rate in response:
+            if rate['cur_unit'] == 'KRW':
+                continue
             ttb_str = rate['ttb'].replace(',','')
             tts_str = rate['tts'].replace(',','')
             deal_str = rate['deal_bas_r'].replace(',','')
