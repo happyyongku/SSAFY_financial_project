@@ -4,8 +4,8 @@
         <div >
             <input type="number" @input="changeWonValue" v-model="korWon" 
             placeholder="환전 할 금액" v-if="type==='sell'">
-            <p v-if="type==='buy'">{{result}}</p> 
             KRW
+            <p v-if="type==='buy'">{{result}}</p> 
             
         </div>
     </div>
@@ -14,7 +14,6 @@
 <script setup>
     import { ref } from 'vue';
     defineProps({
-        type:String,
         result:Number
     })
 

@@ -217,6 +217,7 @@ export const useExchangeStore = defineStore('exchange', () => {
         korWon.value = null
         tradeMoney.value = null
         result.value = null
+        tradeCurrent.value = null
     }
 
     return {

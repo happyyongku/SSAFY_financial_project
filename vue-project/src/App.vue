@@ -41,6 +41,10 @@
     </nav>
   </header>
   <RouterView />
+  <div>
+    <button @click="switchChat">chat bot test</button>
+    
+  </div>
 </template>
 
 <script setup>
@@ -48,6 +52,11 @@ import { RouterView, RouterLink } from 'vue-router'
 import { ref } from 'vue'
 
 const userId = ref(1)
+const chatBot = ref(false)
+const switchChat = function(){
+  chatBot.value = chatBot.value===false?true:false
+}
+
 </script>
 
 <style scoped>

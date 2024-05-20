@@ -23,11 +23,14 @@
                 :rate-list="store.currentExchange"
                 :type="store.tradeType"
                 :result="store.result"
+                :trade-current="store.tradeCurrent"
                 @updateCurrent="updateCurrent"
                 @changeTradeMoney="updateTradeMoney"
                 @calculate="calculate"
                 />
+                
                 <button @click="switching">switch</button>
+
                 <KorWon v-if="store.tradeType==='buy'"
                 :type="store.tradeType"
                 :result="store.result"
@@ -37,6 +40,7 @@
                 :rate-list="store.currentExchange"
                 :type="store.tradeType"
                 :result="store.result"
+                :trade-current="store.tradeCurrent"
                 @updateCurrent="updateCurrent"
                 @changeTradeMoney="updateTradeMoney"
                 @calculate="calculate"
