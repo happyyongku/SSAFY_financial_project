@@ -41,6 +41,9 @@
         const selectedIdx = event.target.selectedIndex
         selectedCurrent.value = props.rateList[selectedIdx]
         emit('updateCurrent', selectedCurrent.value)
+        if (tradeMoney.value){
+            emit('calculate')
+        }
     }
 
     const changeCurrent = function(){

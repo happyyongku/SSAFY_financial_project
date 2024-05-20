@@ -12,6 +12,7 @@ import UserView from '@/views/UserView.vue'
 import UserProfile from '@/components/UserProfile.vue'
 import UserPosts from '@/components/UserPosts.vue'
 import ExchangeCalculator from '@/views/ExchangeCalculator.vue'
+import ChatBotView from '@/views/ChatBotView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -74,6 +75,11 @@ const router = createRouter({
       path: '/exchange-calculrator',
       name: 'ExchangeView',
       component: ExchangeCalculator,
+    },
+    {
+      path: '/chatbot',
+      name: 'ChatBotView',
+      component: ChatBotView
     }
 
   ]

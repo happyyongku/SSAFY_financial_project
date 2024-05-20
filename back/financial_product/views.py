@@ -323,4 +323,14 @@ def get_option_list(request, type, product_id):
         options = product.installmentsavingoption_set.all()
         serializer = InstallmentSavingOptionSerializer(options, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
+@api_view(['GET'])
+def fetch_product(request, type):
+    if type=='deposit':
+        deposits = DepositProduct.objects.all()
+        serializer = DepositProductSerializer(deposits, many=True)
+        return Response(serializer, status=status.HTTP_200_OK)
+    elif type=='installment':
+        installment = InstallmentSavingProduct.objects.all()
+        serializer = InstallmentSavingProductSerializer(installment, many=True)
+        return Response(serializer, status=status.HTTP_200_OK)

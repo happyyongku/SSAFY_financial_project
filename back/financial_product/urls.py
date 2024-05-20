@@ -9,5 +9,6 @@ urlpatterns = [
     path('get_rate/<str:date>/', views.get_rate),
     path('search/bank_list/', views.get_bank_list),
     path('search/product/<str:type>/<int:bank_id>/', views.get_product_list),
-    path('search/option/<str:type>/<int:product_id>/', views.get_option_list)
+    path('search/option/<str:type>/<int:product_id>/', views.get_option_list),
+    path('fetch/product/<str:type>/', views.fetch_product),
 ]

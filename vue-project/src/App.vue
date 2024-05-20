@@ -29,11 +29,16 @@
             <li class="nav-item">
               <RouterLink :to="{ name: 'MapView' }" class="custom-router-link">내 집 주변 은행 검색</RouterLink>
             </li>
-            <li class="nav-item">
+            <!-- <li class="nav-item">
               <RouterLink :to="{ name: 'ProductRecommendView' }" class="custom-router-link">나에게 맞는 상품 추천</RouterLink>
-            </li>
+            </li> -->
             <li class="nav-item">
               <RouterLink :to="{ name: 'UserView', params: {'id' : userId } }" class="custom-router-link">나의 프로필</RouterLink>
+            </li>
+            <li class="nav-item">
+              <RouterLink :to="{name: 'ChatBotView'}" class="custom-router-link">
+                챗봇 상품 추천
+              </RouterLink>
             </li>
           </ul>
         </div>
@@ -41,11 +46,8 @@
     </nav>
   </header>
   <RouterView />
-  <div>
-    <button @click="switchChat">chat bot test</button>
-    
-  </div>
 </template>
+
 
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'

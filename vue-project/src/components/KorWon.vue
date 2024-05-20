@@ -13,8 +13,11 @@
 
 <script setup>
     import { ref } from 'vue';
+    // const apiKey = import.meta.env.VITE_API_KEY_GPT
     defineProps({
-        result:Number
+        result:Number,
+        type: String,
+        result:Number,
     })
 
     const korWon = ref(null)
