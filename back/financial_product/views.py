@@ -334,3 +334,7 @@ def fetch_product(request, type):
         installment = InstallmentSavingProduct.objects.all()
         serializer = InstallmentSavingProductSerializer(installment, many=True)
         return Response(serializer, status=status.HTTP_200_OK)
+    
+@api_view(['GET'])
+def chatAI(request):
+    ...
