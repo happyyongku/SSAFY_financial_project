@@ -5,7 +5,9 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 import pandas as pd
+from openai import OpenAI
 from datetime import date, datetime, timedelta
+import json
 from .models import (
     FinancialCompany, 
     DepositOption, 
@@ -22,6 +24,8 @@ from .serializers import (
     InstallmentSavingProductSerializer,
     ExchangeRateSerializer
 )
+
+chat_history = []
 
 # Create your views here.
 
@@ -334,7 +338,47 @@ def fetch_product(request, type):
         installment = InstallmentSavingProduct.objects.all()
         serializer = InstallmentSavingProductSerializer(installment, many=True)
         return Response(serializer, status=status.HTTP_200_OK)
-    
+
+
+# DB 내의 상품과 옵션 데이터를 fixture (json이나 csv)로 만들고 아래 코드로 읽어서 bank_info에 넣기
+bank_info = []
+# with open('파일경로', 'r', encoding='utf-8') as f :
+#     text = f.read()
 @api_view(['GET'])
 def chatAI(request):
-    ...
+    global chat_history
+    print('//////')
+    API_KEY = settings.API_KEY_AI
+    client = OpenAI(api_key=API_KEY)
+    input_message = request.query_params.get('message','')
+    print(input_message)
+    
+    chat_history.extend(
+        [
+            {"role": "user", "content": f"{input_message} 그리고 한글로 꼭 대답해주고 아래 정보에 기반해서 답변해줘야해 {bank_info}"},
+            
+        ] 
+    )
+    
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            temperature=0.0,
+            # response_format={'type':'json_object'},
+            messages= chat_history,
+            stop=['Human'],
+            frequency_penalty=0.5,
+            presence_penalty=0.5
+        )
+        output_message = response.choices[0].message.content
+        print(output_message)
+        chat_history.append({"role": "assistant", "content": f"{output_message}"})
+        return Response(output_message,status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+def history_initialize(request):
+    global chat_history
+    chat_history = []
+    return Response(status=status.HTTP_202_ACCEPTED)

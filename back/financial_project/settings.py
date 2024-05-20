@@ -186,6 +186,7 @@ ACCOUNT_ADAPTER = 'accounts.models.CustomAccountAdapter'
 
 API_KEY_EXCHANGE = env('API_KEY_EXCHANGE')
 API_KEY_FINANCIAL = env('API_KEY_FINANCIAL')
+API_KEY_AI = env('API_KEY_GPT')
 
 
 #---------------------------------------------------Celery-------------------------------------------------------

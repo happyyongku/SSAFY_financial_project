@@ -87,6 +87,7 @@ const router = createRouter({
 
 import { useCounterStore } from '@/stores/counter'
 import { useExchangeStore } from '@/stores/financial'
+import axios from 'axios'
 
 
 router.beforeEach((to, from) => {
@@ -111,6 +112,16 @@ router.beforeEach((to, from) => {
     console.log('///////////')
     exchangeStore.getTargetRate(exchangeStore.currentDate)
     exchangeStore.getDateList()
+  }
+
+  if (to.name === 'ChatBotView'){
+    axios({
+      url:'http://127.0.0.1:8000/financial_product/chat/initialize/',
+      method: 'post'
+    })
+    .then(res => {
+      console.log('initialized')
+    })
   }
 })
 
