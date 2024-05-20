@@ -6,6 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 import pandas as pd
 from datetime import date, datetime, timedelta
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage
 from .models import (
     FinancialCompany, 
     DepositOption, 
@@ -326,11 +328,30 @@ def get_option_list(request, type, product_id):
 
 @api_view(['GET'])
 def fetch_product(request, type):
+    print('/////////////////')
     if type=='deposit':
         deposits = DepositProduct.objects.all()
         serializer = DepositProductSerializer(deposits, many=True)
-        return Response(serializer, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     elif type=='installment':
         installment = InstallmentSavingProduct.objects.all()
         serializer = InstallmentSavingProductSerializer(installment, many=True)
-        return Response(serializer, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    print('--------------------')
+
+@api_view(['GET'])
+def chatAI(request):
+    API_KEY_AI = settings.API_KEY_AI
+    chat = ChatOpenAI(model='gpt-3.5-turbo-1106', temperature=0.2, openai_api_key=API_KEY_AI)
+    input_message = request.query_params.get('message','')
+    print(input_message)
+    
+    chat.invoke(
+        [
+            HumanMessage(
+                content=f'{input_message}'
+            )
+        ]
+    )
+    print(AIresponse)
+    return Response(status=status.HTTP_200_OK)
