@@ -373,11 +373,11 @@ for db in db_list:
     df = pd.DataFrame(rows, columns=columns)
     json_data = df.to_json(orient='records', force_ascii=False)
     if 'company' in db:
-        company_info.append(json.loads(json_data))
+        company_info.extend(json.loads(json_data))
     elif 'deposit' in db:
-        deposit_info.append(json.loads(json_data))
+        deposit_info.extend(json.loads(json_data))
     elif 'installment' in db:
-        installment_info.append(json.loads(json_data))
+        installment_info.extend(json.loads(json_data))
 
 conn.close()
 
@@ -399,6 +399,7 @@ def chatAI(request):
     )
     
     if '은행' in input_message and '추천' in input_message:
+        print(company_info[0])
         chat_history.append(
             {"role": "system", "content": f"만약 은행을 추천한다면 아래 정보에 기반해서 한글로 답변해줘. {company_info}"}
         )
