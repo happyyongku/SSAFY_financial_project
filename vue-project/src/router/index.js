@@ -13,12 +13,18 @@ import UserProfile from '@/components/UserProfile.vue'
 import UserPosts from '@/components/UserPosts.vue'
 import ExchangeCalculator from '@/views/ExchangeCalculator.vue'
 import ChatBotView from '@/views/ChatBotView.vue'
+import HomeView from '@/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path:'/',
+      name: 'HomeView',
+      component: HomeView
+    },
+    {
+      path: '/articles',
       name: 'ArticleView',
       component: ArticleView
     },
@@ -104,7 +110,7 @@ router.beforeEach((to, from) => {
   // }
   if ((to.name === 'SignUpView' || to.name === 'LogInView') && (store.isLogin === true)) {
     window.alert('이미 로그인 했습니다.')
-    return { name: 'ArticleView' }
+    return { name: 'HomeView' }
   }
 
   if (to.name === 'ExchangeView') {

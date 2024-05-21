@@ -11,7 +11,7 @@ class User(AbstractUser):
     capital = models.BigIntegerField(blank=True, null=True)
     special_condition = models.TextField(blank=True, null=True)
     # super.username.set_attributes_from_name('editible', False)
-
+    
 
 # # class UserProfile(models.Model):
 # #     user_pk = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

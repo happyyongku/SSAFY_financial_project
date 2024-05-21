@@ -10,6 +10,6 @@ class FinancialProductConfig(AppConfig):
         from .tasks import my_scheduled_task
         from apscheduler.triggers.cron import CronTrigger
         
-        trigger = CronTrigger(hour=11, minute=48)
+        trigger = CronTrigger(hour=11, minute=10)
         scheduler.add_job(my_scheduled_task, trigger)
         scheduler.start()
