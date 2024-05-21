@@ -5,7 +5,7 @@
                 <div v-for="(msg, index) in messages" :key="index" class="message">{{ msg.sender }}: {{ msg.content }}</div>
             </div>
             <div id="user-input">
-                <input v-model="userMessage" @keyup.enter="sendMessage" type="text" placeholder="나에게 맞는 금융 상품을 추천해줘" @input="temp"/>
+                <input v-model="userMessage" @keyup.enter="sendMessage" type="text" placeholder="나에게 맞는 금융 상품을 추천해줘"/>
                 <button @click="sendMessage">전송</button>
             </div>
         </div>
@@ -14,33 +14,36 @@
     
     <script setup>
     import axios from 'axios';
-import { ref } from 'vue'
+    import { ref } from 'vue'
     
     const FIN_URL = 'http://127.0.0.1:8000/financial_product'
     const messages = ref([])
     const userMessage = ref('')
-    
-    const OPENAI_API_KEY = import.meta.env.VITE_API_KEY_GPT
 
     const sendMessage = function(){
+        messages.value.push({sender: 'user', content: userMessage.value})
         axios({
             url:`${FIN_URL}/chat/`,
             method:'get',
-            params: {
+            params:{
                 message: userMessage.value
             }
         })
-    }
-
-    const temp = function(){
-        console.log(userMessage.value)
+        .then(response=>{
+            const responseMessage =response.data
+            console.log(responseMessage)
+            messages.value.push({sender:'챗봇', content: responseMessage})
+        })
+        .catch(error => {
+            console.log(error)
+        })
+        userMessage.value = null
     }
     
-    // Django API에서 예금 상품 정보 가져오기
+    // // Django API에서 예금 상품 정보 가져오기
     // async function fetchDepositProducts(){
     //     try {
     //         const response = await fetch(`${FIN_URL}/fetch/product/deposit/`)
-    //         console.log(`예금 res : ${response.json()}`)
     //         return await response.json()
     //     }
     //     catch(error){
@@ -52,7 +55,6 @@ import { ref } from 'vue'
     // async function fetchInstallmentProducts() {
     //     try{
     //         const response = await fetch(`${FIN_URL}/fetch/product/installment/`)
-            
     //         return await response.json()
     //     }
     //     catch(error){
@@ -73,7 +75,7 @@ import { ref } from 'vue'
     //   // 특정 문장에 비슷한 응답을 하도록 지침 추가
     //     const fixedPrompts = {
     //         //-----------------------
-    //         "금융 상품을 추천해줘":"사용자가 '금융 상품을 추천해줘'와 비슷하게 물어보면 '물론이죠! 상품 유형을 선택해주세요!'로 대답해줘."
+    //         "금융 상품을 추천해줘":"사용자가 '금융 상품을 추천해줘'와 비슷하게 물어보면 '물론이죠! 정기 예금과 적금 중에 선택해주세요!'로 대답해줘."
     //     }
     
     //     let adjustedPrompt = prompt
@@ -115,18 +117,14 @@ import { ref } from 'vue'
     //         chatHistory.push({ role: "assistant", content: aiResponse });
     //         console.log(aiResponse)
 
-    //         if (aiResponse.includes('추천')) {
-    //             if (aiResponse.includes('예금')) {
-    //                 const products = await fetchDepositProducts()
-    //                 return `추천드리는 예금 상품입니다!
-    //                 ${products.map(p => p.name).join(', ')}`
-    //             }
-    //             else if (aiResponse.includes('적금')){
-    //                 const products = await fetchInstallmentProducts()
-    //                 return `추천 적금 상품: ${products.map(p=> p.name).join(', ')}`
-    //             }
+    //         if (aiResponse.includes('예금')) {
+    //             const products = await fetchDepositProducts()
+    //             return `추천 예금 상품: ${products.map(p => p.name).join(', ')}`
     //         }
-            
+    //         else if (aiResponse.includes('적금')){
+    //             const products = await fetchInstallmentProducts()
+    //             return `추천 적금 상품: ${products.map(p=> p.name).join(', ')}`
+    //         }
 
     //         return aiResponse;
     //     } catch (error) {
@@ -151,9 +149,6 @@ import { ref } from 'vue'
     //     });
     // }
 
-    
-
-    
     </script>
     
     <style scoped>
@@ -182,7 +177,7 @@ import { ref } from 'vue'
         overflow-y: auto;
         padding: 10px;
         display: flex;
-        flex-direction: column-reverse;
+        flex-direction: column;
     }
     #user-input {
         display: flex;

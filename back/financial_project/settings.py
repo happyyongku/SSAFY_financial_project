@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -94,6 +95,8 @@ WSGI_APPLICATION = 'financial_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+DB_PASSWORD = env('DB_PASSWORD')
 
 DATABASES = {
     'default': {
@@ -188,21 +191,33 @@ API_KEY_EXCHANGE = env('API_KEY_EXCHANGE')
 API_KEY_FINANCIAL = env('API_KEY_FINANCIAL')
 API_KEY_AI = env('API_KEY_GPT')
 
+# ------------------ apscheduler ------------------------
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+SCHEDULER_DEFAULT=True
+
+
 #---------------------------------------------------Celery-------------------------------------------------------
 
-from celery import shared_task
-from celery.schedules import crontab
+# from celery import shared_task
+# from celery.schedules import crontab
+# from celery import Celery
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESUTL_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Seoul'
+# CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESUTL_SERIALIZER = 'json'
+# CELERY_TIMEZONE = 'KST'
+# #Asia/Seoul
 
-CELERY_BEAT_SCHEDULE = {
-    'run-every-morning': {
-        'task': 'myapp.tasks.my_task',
-        'schedule': crontab(hour=1, minute=0),  # 매일 오전 1시에 실행
-    },
-}
+# app = Celery('financial_project')
+
+# app.config_from_object('django.conf:settings', namespace='CELERY')
+# app.autodiscover_tasks()
+
+# CELERY_BEAT_SCHEDULE = {
+#     'run-every-morning': {
+#         'task': 'financial_product.tasks.my_task',
+#         'schedule': crontab(hour=10, minute=15),  # 매일 오전 1시에 실행
+#     },
+# }
