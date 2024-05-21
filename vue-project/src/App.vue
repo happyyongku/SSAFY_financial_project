@@ -45,7 +45,7 @@
         </div>
       </nav>
     </header>
-    <RouterView />
+    <RouterView/>
   </div>
   <footer>footer</footer>
 </template>
@@ -70,7 +70,7 @@ const switchChat = function(){
 }
 
 .bg-custom-navbar {
-  background-color: #F2E394 ;
+  background-color: #faedad ;
 }
 
 .custom-router-link {

@@ -149,13 +149,14 @@ export const useCounterStore = defineStore('counter', () => {
       .then((response) => {
         token.value = response.data.key
         router.push({ name : 'ArticleView' })
+        console.log(response.data)
       })
       .catch((error) => {
         console.log(error)
         window.alert('입력이 제대로 이루어지지 않았습니다.')
       })
   }
-
+  
   const logOut = function () {
     token.value = null
     router.push({ name: 'LoginView' })

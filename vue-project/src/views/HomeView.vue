@@ -1,8 +1,17 @@
 <template>
-    <div class="d-flex flex-column align-items-center py-5">
-        <div class="border w-75">
-            <h3 class="m-3">YG Financial</h3>
-            <nav class="d-flex p-3 justify-content-evenly">
+    <div class=" d-flex flex-column align-items-center py-5">
+        <section class="border w-75">
+            <div class="d-flex justifiy-content-between">
+                <div class="">
+                    <h1 class="mt-5 ms-5">YG Financial</h1>
+                    <h4 class="mt-5 ms-5">고객 맞춤형 금융 서비스 YG Financial</h4>
+                </div>
+                <div class="image-container">
+                    <img src="@/assets/man_img.png" alt="man" id="man-img">
+                    <img src="@/assets/woman_img.png" alt="woman" id="woman-img">
+                </div>
+            </div>
+            <nav class="d-flex p-3 justify-content-evenly " id="nav-icon">
                 <div class="flex-column text-center" @click="goToCompare">
                     <img src="@/assets/product_compare_icon.png" alt="compare-icon" id="icon">
                     <p class="m-2" id="nav-icon-text">금융 상품 비교</p>
@@ -20,12 +29,18 @@
                     <p class="m-2" id="nav-icon-text">챗봇 상담</p>
                 </div>
             </nav>
-        </div>
+        </section>
+        <section class="d-flex justify-content-evenly w-75">
+            <CurrentChart/>
+            <CurrentGraph/>
+        </section>
     </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
+import CurrentChart from '@/components/CurrentChart.vue'
+import CurrentGraph from '@/components/CurrentGraph.vue'
 
 const router = useRouter()
 const goToCompare = function(){

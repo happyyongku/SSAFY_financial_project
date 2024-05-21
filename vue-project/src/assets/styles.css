@@ -1,7 +1,25 @@
 #icon {
     width: 100px;
+    padding-top: 5vh;
 }
 
 #nav-icon-text {
     font-weight: bold;
+    padding-bottom: 5vh;
+}
+
+#nav-icon {
+    border: solid black;
+    margin-bottom: 10vh;
+    background-color: #faedad;
+    width: 100%;
+}
+
+#woman-img {
+    position: absolute;
+    bottom: 0px;
+}
+
+.image-container{
+    position: relative;
 }

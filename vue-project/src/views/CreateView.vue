@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="">
     <h1>게시글 작성</h1>
     <form @submit.prevent="createArticle">
       <div>

@@ -485,11 +485,13 @@ def fetch_product(request, type):
 
 
 # DB 내의 상품과 옵션 데이터를 fixture (json이나 csv)로 만들고 아래 코드로 읽어서 bank_info에 넣기
+# DB 데이터를 읽어와서 ai한테 줄 리스트로 만들기
 company_info = []
 deposit_info = []
 installment_info = []
 # with open('파일경로', 'r', encoding='utf-8') as f :
 #     text = f.read()
+# import pymysql
 conn = pymysql.connect(
     host='localhost',
     user='yonggu97',

@@ -14,7 +14,6 @@ import UserPosts from '@/components/UserPosts.vue'
 import ExchangeCalculator from '@/views/ExchangeCalculator.vue'
 import ChatBotView from '@/views/ChatBotView.vue'
 import HomeView from '@/views/HomeView.vue'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [

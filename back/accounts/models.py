@@ -6,7 +6,7 @@ from allauth.account.adapter import DefaultAccountAdapter
 # Create your models here.
 
 class User(AbstractUser):
-    nickname=models.CharField(max_length=30, blank=True, null=True)
+    nickname=models.CharField(max_length=30, blank=True, null=True, default='anonymous')
     # birth = models.DateField(blank=True)
     capital = models.BigIntegerField(blank=True, null=True)
     special_condition = models.TextField(blank=True, null=True)
