@@ -494,8 +494,8 @@ installment_info = []
 # import pymysql
 conn = pymysql.connect(
     host='localhost',
-    user='yonggu97',
-    password = settings.DB_PASSWORD,
+    user='root',
+    password = '0000',
     db = 'ssafy_final'
 )
 cursor = conn.cursor()
