@@ -102,8 +102,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SSAFY_final',
-        'USER': 'root',
-        'PASSWORD': '0000',
+        'USER': 'yonggu97',
+        'PASSWORD': 'rhwjsvkskdaksvk0462!',
         'HOST': 'localhost', # MySQL 호스트
         'PORT': '3306',      # MySQL 포트 (기본값은 3306)
     }
