@@ -1,24 +1,3 @@
-<!-- <template>
-  <div>
-    <h1>UserProfile</h1>
-    <div class="card custom-border" style="width: 18rem;">
-      <img src="@/assets/yonggu.png" class="card-img-top" alt="user image">
-      <div class="card-body">
-        <h3 class="card-title">유저 프로필</h3>
-        <p class="card-text">.</p>
-      </div>
-      <ul class="list-group list-group-flush">
-        <li class="list-group-item">전화번호 :</li>
-        <li class="list-group-item">이메일 주소 : </li>
-        <li class="list-group-item">주소 : </li>
-      </ul>
-      <div class="card-body">
-        <a class="card-link" @click="logOut">로그아웃</a>
-        <a class="card-link" @click="confirmSignOut">회원탈퇴</a>
-      </div>
-    </div>
-  </div>
-</template> -->
 
 <template>
 <h1>UserProfile</h1>

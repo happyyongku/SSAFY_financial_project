@@ -96,7 +96,7 @@ export const useCounterStore = defineStore('counter', () => {
   const signOut = function () {
     axios({
       method: 'delete',
-      url: `${API_URL}/accounts/delete/`,
+      url: `${API_URL}/accounts/profile/delete/`,
       headers: {
         Authorization: `Token ${token.value}`
       }

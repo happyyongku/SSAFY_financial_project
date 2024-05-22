@@ -128,6 +128,23 @@ router.beforeEach((to, from) => {
       console.log('initialized')
     })
   }
+
+  if (to.name === 'ExchangeView') {
+    exchangeStore.getToday()
+    console.log('///////////')
+    exchangeStore.getTargetRate(exchangeStore.currentDate)
+    exchangeStore.getDateList()
+  }
+
+  if (to.name === 'ChatBotView'){
+    axios({
+      url:'http://127.0.0.1:8000/financial_product/chat/initialize/',
+      method: 'post'
+    })
+    .then(res => {
+      console.log('initialized')
+    })
+  }
 })
 
 export default router
