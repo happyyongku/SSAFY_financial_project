@@ -18,9 +18,10 @@
                 <RouterLink :to="{ name: 'SignUpView' }" class="custom-router-link">회원가입</RouterLink>
               </li>
               <li class="nav-item">
-                <RouterLink :to="{ name: 'LogInView' }" class="custom-router-link"
-                v-if="!userId">로그인</RouterLink>
-                <RouterLink :to="{name:'HomeView'}" v-if="userId" >로그아웃</RouterLink>
+                <RouterLink :to="{ name: 'LogInView' }" class="custom-router-link">로그인</RouterLink>              
+              </li>
+              <li class="nav-item">
+                <a @click="store.logOut">로그아웃</a>              
               </li>
               <li class="nav-item">
                 <RouterLink :to="{ name: 'ReadProductView' }" class="custom-router-link">전체 금융 상품 조회</RouterLink>
@@ -56,12 +57,15 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'
 import { ref } from 'vue'
+import { useCounterStore } from './stores/counter';
 
 const userId = ref(1)
 const chatBot = ref(false)
 const switchChat = function(){
   chatBot.value = chatBot.value===false?true:false
 }
+
+const store = useCounterStore()
 
 </script>
 

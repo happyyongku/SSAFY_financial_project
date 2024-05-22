@@ -571,7 +571,10 @@ def chatAI(request):
         chat_history.append({"role": "assistant", "content": f"{output_message}"})
         return Response(output_message,status=status.HTTP_200_OK)
     except Exception as e:
+<<<<<<< HEAD
         print(e)
+=======
+>>>>>>> 9398c0a4001835eae67f946a994759135e44c666
         return Response({'error': str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 @api_view(['POST'])

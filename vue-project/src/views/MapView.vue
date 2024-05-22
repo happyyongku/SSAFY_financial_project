@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div>
     <h1 class="ercword">내 집 주변 은행 검색</h1>
     <div class="container custom-border">
@@ -9,6 +9,7 @@
             <input type="text" id="keyword" size="15" placeholder="키워드 입력" class="custom-border" />
             <input type="text" id="region" size="15" placeholder="지역 입력" class="custom-border" />
             <button @click="searchPlaces" class="custom-border">검색하기</button>
+            <button @click="toggleMapType" class="custom-border">지도 타입 변경</button>
           </div>
         </div>
         <ul id="placesList"></ul>
@@ -20,6 +21,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      mapType: "normal" // 지도 형태 초기값은 일반 지도로 설정
+    };
+  },
   mounted() {
     if (window.kakao && window.kakao.maps) {
       this.initMap();
@@ -43,6 +49,7 @@ export default {
         const mapOption = {
           center: new kakao.maps.LatLng(latitude, longitude),
           level: 3,
+          mapTypeId: kakao.maps.MapTypeId.ROADMAP // 초기 지도 타입 설정 (일반 지도)
         };
 
         this.map = new kakao.maps.Map(mapContainer, mapOption);
@@ -114,9 +121,13 @@ export default {
       const itemStr = `
         <span class="markerbg marker_${index + 1}"></span>
         <div class="info">
-          <h5>${place.place_name}</h5>
-          ${place.road_address_name ? `<span>${place.road_address_name}</span><span class="jibun gray">${place.address_name}</span>` : `<span>${place.address_name}</span>`}
-          <span class="tel">${place.phone}</span>
+          <h5>${index + 1}. ${place.place_name}</h5>
+          <div>
+            <span>${place.road_address_name ? place.road_address_name : place.address_name}</span>
+          </div>
+          <div>
+            <span class="tel">${place.phone}</span>
+          </div>
         </div>
       `;
       el.innerHTML = itemStr;
@@ -172,8 +183,14 @@ export default {
         el.removeChild(el.lastChild);
       }
     },
+    toggleMapType() {
+      // 현재 지도의 타입 확인하여 스카이뷰이면 일반 지도로 변경, 일반 지도이면 스카이뷰로 변경
+      this.mapType = this.mapType === "normal" ? "skyview" : "normal";
+      this.map.setMapTypeId(this.mapType === "normal" ? kakao.maps.MapTypeId.ROADMAP : kakao.maps.MapTypeId.SKYVIEW);
+    },
   },
 };
+
 </script>
 
 <style>
@@ -196,6 +213,15 @@ export default {
 #placesList .item {
   padding: 10px;
   border-bottom: 1px solid #e2e2e2;
+  line-height: 1.5; /* 줄 간격 조정 */
+}
+#placesList .info {
+  margin-left: 10px; /* 정보 항목에 좌측 여백 추가 */
+}
+#placesList .tel {
+  display: block; /* 전화번호를 별도의 줄로 표시 */
+  margin-top: 5px; /* 상단 여백 추가 */
+  color: #007bff; /* 전화번호 색상 변경 */
 }
 #pagination a {
   margin: 0 2px;

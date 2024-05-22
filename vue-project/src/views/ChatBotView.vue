@@ -20,6 +20,13 @@
     const messages = ref([])
     const userMessage = ref('')
 
+<<<<<<< HEAD
+=======
+    const textTest = function(){
+        console.log(userMessage.value)
+    }
+
+>>>>>>> 9398c0a4001835eae67f946a994759135e44c666
     const sendMessage = function(){
         messages.value.push({sender: 'user', content: userMessage.value})
         axios({
@@ -149,6 +156,12 @@
     //     });
     // }
 
+<<<<<<< HEAD
+=======
+    
+
+    
+>>>>>>> 9398c0a4001835eae67f946a994759135e44c666
     </script>
     
     <style scoped>

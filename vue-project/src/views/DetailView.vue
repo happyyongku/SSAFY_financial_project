@@ -5,8 +5,6 @@
       <p>{{ article.id }}</p>
       <p>{{ article.title }}</p>
       <p>{{ article.content }}</p>
-      <p>{{ article.created_at }}</p>
-      <p>{{ article.updated_at }}</p>
     </div>
     <div v-if="comments.length">
       <h2>Comments</h2>
@@ -18,29 +16,36 @@
     <div v-else>
       <p>No comments found.</p>
     </div>
+    <button @click="goToEdit">수정</button>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useCounterStore } from '@/stores/counter';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
 
 const store = useCounterStore();
 const route = useRoute();
+const router = useRouter();
 const article = ref(null);
 const comments = ref([]);
+
+const goToEdit = () => {
+  router.push({ name: 'ArticleEdit', params: { id: article.value.id } });
+};
 
 onMounted(() => {
   axios({
     method: 'get',
-    url: `${store.API_URL}/api/v1/articles/${route.params.id}/`,
+    url: `${store.API_URL}/articles/${route.params.id}/comments/`
   })
     .then((response) => {
       article.value = response.data;
     })
     .catch((error) => {
-      console.log(error);
+      console.error('Error fetching article:', error);
     });
 
   store.getComments(route.params.id);
