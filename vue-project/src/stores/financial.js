@@ -26,7 +26,10 @@ export const useFinancialStore = defineStore('financial', () => {
     const option1 = ref(null)
     const option2 = ref(null)
     const URL = 'http://127.0.0.1:8000'
-    const token= ref(useCounterStore().token)
+    const counterStore = useCounterStore()
+        const token = computed(()=>{
+            return counterStore.token
+        })
     const readTable = ref([])
     const readType = ref('deposit')
     const FIN_URL = 'http://127.0.0.1:8000/financial_product'

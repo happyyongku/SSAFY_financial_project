@@ -12,12 +12,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import { useCounterStore } from '@/stores/counter';
 
 const store = useCounterStore();
 const userPosts = ref([]);
+const token = computed(()=>{
+    return store.token
+})
 
 onMounted(() => {
   // 유저가 작성한 게시글을 가져오는 API 요청
@@ -25,7 +28,7 @@ onMounted(() => {
     method: 'get',
     url: `${store.API_URL}/user-posts/`, // 유저가 작성한 게시글을 가져오는 엔드포인트로 수정 필요
     headers: {
-      Authorization: `Token ${store.token}`,
+      Authorization: `Token ${token.value}`,
     },
   })
     .then((response) => {

@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCounterStore } from '@/stores/counter';
 import axios from 'axios';
@@ -21,13 +21,16 @@ const store = useCounterStore();
 const route = useRoute();
 const router = useRouter();
 const content = ref('');
+const token = computed(()=>{
+    return store.token
+})
 
 onMounted(() => {
 axios({
   method: 'get',
   url: `${store.API_URL}/comments/${route.params.id}/`, // 수정된 부분
   headers: {
-    Authorization: `Token ${store.token}`,
+    Authorization: `Token ${token.value}`,
   },
 })
   .then((response) => {
@@ -43,7 +46,7 @@ axios({
   method: 'put', // HTTP 요청 방식 변경
   url: `${store.API_URL}/comments/${route.params.id}/`, // 수정된 부분
   headers: {
-    Authorization: `Token ${store.token}`,
+    Authorization: `Token ${token.value}`,
   },
   data: { // 수정된 부분: 댓글의 수정된 내용을 요청 본문에 포함
     content: content.value,

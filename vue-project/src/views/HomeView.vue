@@ -3,7 +3,7 @@
         <section class="border w-75">
             <div class="d-flex justifiy-content-between">
                 <div class="">
-                    <h1 class="mt-5 ms-5">YG Financial</h1>
+                    <h1 class="mt-5 ms-5" @click="testId">YG Financial</h1>
                     <h4 class="mt-5 ms-5">고객 맞춤형 금융 서비스 YG Financial</h4>
                 </div>
                 <div class="image-container">
@@ -41,6 +41,8 @@
 import { useRouter } from 'vue-router';
 import CurrentChart from '@/components/CurrentChart.vue'
 import CurrentGraph from '@/components/CurrentGraph.vue'
+import { useCounterStore } from '@/stores/counter.js';
+
 
 const router = useRouter()
 const goToCompare = function(){
@@ -54,6 +56,12 @@ const goToBankMap = function(){
 }
 const goToChatBot = function(){
     router.push({name:"ChatBotView"})
+}
+
+const store = useCounterStore()
+const testId = function(){
+    console.log(`inform : ${store.userId}`)
+    console.log(store.test)
 }
 
 </script>

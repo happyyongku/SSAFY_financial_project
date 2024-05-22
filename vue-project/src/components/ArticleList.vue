@@ -14,4 +14,5 @@ import { useCounterStore } from '@/stores/counter'
 import ArticleListItem from '@/components/ArticleListItem.vue'
 
 const store = useCounterStore()
+
 </script>

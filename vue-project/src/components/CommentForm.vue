@@ -12,7 +12,7 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
   import { useRoute, useRouter } from 'vue-router';
   import { useCounterStore } from '@/stores/counter';
   import axios from 'axios';
@@ -21,13 +21,17 @@
   const route = useRoute();
   const router = useRouter();
   const content = ref('');
+  const counterStore = useCounterStore()
+  const token = computed(()=>{
+      return store.token
+  })
   
   const submitComment = () => {
     axios({
       method: 'post',
       url: `${store.API_URL}/articles/${route.params.id}/comments/`,
       headers: {
-        Authorization: `Token ${store.token}`,
+        Authorization: `Token ${token.value}`,
       },
       data: {
         content: content.value,

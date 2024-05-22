@@ -17,7 +17,7 @@
 
 <script setup>
 import axios from 'axios'
-import { ref } from 'vue'
+import { ref , computed} from 'vue'
 import { useCounterStore } from '@/stores/counter'
 import { useRouter, useRoute } from 'vue-router'
 
@@ -26,6 +26,9 @@ const title = ref(null)
 const content = ref(null)
 const router = useRouter()
 const route = useRoute()
+const token = computed(()=>{
+    return store.token
+})
 
 const createArticle = function () {
   console.log(route)
@@ -37,11 +40,11 @@ const createArticle = function () {
       content: content.value
     },
     headers: {
-      Authorization: `Token ${store.token}`
+      Authorization: `Token ${token.value}`
     }
   })
     .then((response) => {
-      // console.log(response.data)
+      console.log(response.data)
       router.push({ name: 'ArticleView' })
     })
     .catch((error) => {

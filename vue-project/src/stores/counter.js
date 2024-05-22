@@ -11,6 +11,11 @@ export const useCounterStore = defineStore('counter', () => {
     return token.value !== null
   })
   const router = useRouter()
+  const initialInfo = {
+    pk:null
+  }
+  const userInfo = ref(initialInfo)
+  const userId = ref(null)
 
   const getArticles = function () {
     axios({
@@ -72,10 +77,32 @@ export const useCounterStore = defineStore('counter', () => {
         username, password
       }
     })
-      .then((response) => {
+      .then(async (response) => {
         token.value = response.data.key
-        router.push({ name : 'ArticleView' })
-        console.log(response.data)
+      })
+      .then(async response => {
+          await axios({
+            url: `${API_URL}/accounts/user/`,
+            method:'get',
+            headers:{
+              Authorization:`Token ${token.value}`
+            }
+          })
+          .then(res => {
+            console.log(res.data)
+            console.log('///////////')
+            userInfo.value = res.data
+            console.log(userInfo.value)
+            userId.value = userInfo.value.pk
+            console.log('///////////')
+            console.log(userId.value)
+          })
+          .catch(err => {
+            console.log(`error inform : ${err}`)
+          })
+      })
+      .then(()=>{
+        router.push({ name : 'HomeView' })
       })
       .catch((error) => {
         console.log(error)
@@ -89,7 +116,9 @@ export const useCounterStore = defineStore('counter', () => {
     } else {
       token.value = null
       window.alert('로그아웃 되었습니다.')
-      router.push({ name: 'LoginView' })
+      userInfo.value = initialInfo
+      userId.value = null
+      router.push({ name: 'LogInView' })
     }
   }
 
@@ -110,5 +139,5 @@ export const useCounterStore = defineStore('counter', () => {
       })
   }
 
-  return { articles, API_URL, getArticles, getComments, signUp, logIn, logOut, signOut, token, isLogin }
+  return { articles, API_URL, getArticles, getComments, signUp, logIn, logOut, signOut, token, isLogin, userInfo, userId }
 }, { persist: true })

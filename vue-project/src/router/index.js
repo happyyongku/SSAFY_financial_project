@@ -15,6 +15,7 @@ import ExchangeCalculator from '@/views/ExchangeCalculator.vue'
 import ChatBotView from '@/views/ChatBotView.vue'
 import HomeView from '@/views/HomeView.vue'
 import ReadProductView from '@/views/ReadProductView.vue'
+import ArticleEdit from '@/components/ArticleEdit.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,7 +33,8 @@ const router = createRouter({
     {
       path: '/articles/:id',
       name: 'DetailView',
-      component: DetailView
+      component: DetailView,
+      props: true
     },
     {
       path: '/create',
@@ -92,6 +94,11 @@ const router = createRouter({
       path:'/read-product',
       name:'ReadProductView',
       component: ReadProductView
+    },
+    {
+      path: '/ArticleEdit',
+      name: 'ArticleEdit',
+      component: ArticleEdit
     }
   ]
 })

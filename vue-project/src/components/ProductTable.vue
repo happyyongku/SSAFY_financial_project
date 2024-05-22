@@ -41,7 +41,7 @@ onMounted(() => {
 const fetchInitialData = async () => {
 
     try {
-        console.log(`Token ${token.value}`)
+        console.log(token)
         await axios({
             url:`http://127.0.0.1:8000/financial_product/read_product/deposit/`,
             method: 'get',

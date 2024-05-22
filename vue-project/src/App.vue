@@ -17,10 +17,10 @@
               <li class="nav-item">
                 <RouterLink :to="{ name: 'SignUpView' }" class="custom-router-link">회원가입</RouterLink>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="!userId">
                 <RouterLink :to="{ name: 'LogInView' }" class="custom-router-link">로그인</RouterLink>              
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="userId">
                 <a @click="store.logOut">로그아웃</a>              
               </li>
               <li class="nav-item">
@@ -36,7 +36,7 @@
                 <RouterLink :to="{ name: 'MapView' }" class="custom-router-link">내 집 주변 은행 검색</RouterLink>
               </li>
 
-              <li class="nav-item">
+              <li class="nav-item" v-if="userId">
                 <RouterLink :to="{ name: 'UserView', params: {'id' : userId } }" class="custom-router-link">나의 프로필</RouterLink>
               </li>
               <li class="nav-item">
@@ -44,6 +44,10 @@
                   챗봇 상품 추천
                 </RouterLink>
               </li>
+              <li>
+                <button @click="test"> test</button>
+              </li>
+              
             </ul>
           </div>
         </div>
@@ -56,16 +60,20 @@
 
 <script setup>
 import { RouterView, RouterLink } from 'vue-router'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useCounterStore } from './stores/counter';
 
-const userId = ref(1)
-const chatBot = ref(false)
-const switchChat = function(){
-  chatBot.value = chatBot.value===false?true:false
+const store = useCounterStore()
+const userId = computed(()=>{
+  return store.userId
+})
+
+const test = function(){
+  console.log(userId.value)
+  console.log('/////')
+  console.log(store.userId)
 }
 
-const store = useCounterStore()
 
 </script>
 
