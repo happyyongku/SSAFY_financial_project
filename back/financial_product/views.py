@@ -579,3 +579,17 @@ def history_initialize(request):
     global chat_history
     chat_history = []
     return Response(status=status.HTTP_202_ACCEPTED)
+
+@api_view(['GET'])
+def read_product(request, type):
+    try:
+        if type == 'deposit':
+            item = DepositProduct.objects.all()
+            serializer = DepositProductSerializer(item, many=True)
+        elif type == 'installment':
+            item=InstallmentSavingProduct.objects.all()
+            serializer = InstallmentSavingProductSerializer(item, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -14,6 +14,8 @@ import UserPosts from '@/components/UserPosts.vue'
 import ExchangeCalculator from '@/views/ExchangeCalculator.vue'
 import ChatBotView from '@/views/ChatBotView.vue'
 import HomeView from '@/views/HomeView.vue'
+import ReadProductView from '@/views/ReadProductView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -85,19 +87,27 @@ const router = createRouter({
       path: '/chatbot',
       name: 'ChatBotView',
       component: ChatBotView
+    },
+    {
+      path:'/read-product',
+      name:'ReadProductView',
+      component: ReadProductView
     }
-
   ]
 })
 
 import { useCounterStore } from '@/stores/counter'
 import { useExchangeStore } from '@/stores/financial'
+import { useFinancialStore } from '@/stores/financial'
+import { ref } from 'vue'
 import axios from 'axios'
 
 
 router.beforeEach((to, from) => {
   const store = useCounterStore()
   const exchangeStore = useExchangeStore()
+  const financialStore = useFinancialStore()
+  const token= ref(useCounterStore().token)
 
   if (to.name === 'ArticleView' && store.isLogin === false) {
     window.alert('로그인이 필요합니다.')
@@ -128,6 +138,26 @@ router.beforeEach((to, from) => {
       console.log('initialized')
     })
   }
+
+  // if (to.name === 'ReadProductView') {
+  //   financialStore.readType = 'deposit'
+  //   axios({
+  //     url: `http://127.0.0.1:8000/financial_product/read_product/deposit/`,
+  //     method:'get',
+  //     headers: {
+  //       Authorization: `Token ${token.value}`
+  //       }
+  //   })
+  //   .then(response => {
+  //     financialStore.readTable = response.data
+  //   })
+  //   .then(() => {
+  //     next()
+  //   })
+  //   .catch(error => {
+  //     console.log(error)
+  //   })
+  // }
 })
 
 export default router

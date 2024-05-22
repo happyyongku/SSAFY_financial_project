@@ -12,5 +12,6 @@ urlpatterns = [
     path('search/option/<str:type>/<int:product_id>/', views.get_option_list),
     path('fetch/product/<str:type>/', views.fetch_product),
     path('chat/', views.chatAI),
-    path('chat/initialize/', views.history_initialize)
+    path('chat/initialize/', views.history_initialize),
+    path('read_product/<str:type>/', views.read_product)
 ]

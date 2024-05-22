@@ -23,7 +23,10 @@
                 <RouterLink :to="{name:'HomeView'}" v-if="userId" >로그아웃</RouterLink>
               </li>
               <li class="nav-item">
-                <RouterLink :to="{ name: 'CompareView' }" class="custom-router-link">예적금 금리 비교</RouterLink>
+                <RouterLink :to="{ name: 'ReadProductView' }" class="custom-router-link">전체 금융 상품 조회</RouterLink>
+              </li>
+              <li class="nav-item">
+                <RouterLink :to="{ name: 'CompareView' }" class="custom-router-link">예적금 금융 상품 비교</RouterLink>
               </li>
               <li class="nav-item">
                 <RouterLink :to="{ name: 'ExchangeView' }" class="custom-router-link">신혼 여행을 위한 환율계산기</RouterLink>
@@ -47,7 +50,6 @@
     </header>
     <RouterView/>
   </div>
-  <footer>footer</footer>
 </template>
 
 

@@ -27,6 +27,9 @@ export const useFinancialStore = defineStore('financial', () => {
     const option2 = ref(null)
     const URL = 'http://127.0.0.1:8000'
     const token= ref(useCounterStore().token)
+    const readTable = ref([])
+    const readType = ref('deposit')
+    const FIN_URL = 'http://127.0.0.1:8000/financial_product'
 
     // const switchBankName = function(side){
     //     if (side === 1){
@@ -140,6 +143,25 @@ export const useFinancialStore = defineStore('financial', () => {
         optionList2.value = []
         }
 
+    const productRead = function(type){
+        console.log('start')
+        axios({
+            url: `${FIN_URL}/read_product/${type}/`,
+            method:'get',
+            headers: {
+                Authorization: `Token ${token.value}`
+                }
+        })
+        .then(response => {
+            console.log(response.data)
+            console.log('aa')
+            readTable.value = response.data
+        })
+        .catch(error => {
+            console.log(`error : ${error}`)
+        })
+    }
+
     return { 
         selectedType, 
         bankList, 
@@ -159,10 +181,13 @@ export const useFinancialStore = defineStore('financial', () => {
         selectedOption2,
         option1,
         option2,
+        readTable,
+        readType,
         getBankList,
         getProductList,
         storeInitialize,
-        getOptionList
+        getOptionList,
+        productRead
     }
 })
 
