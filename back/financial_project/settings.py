@@ -175,6 +175,12 @@ CORS_ALLOWED_ORIGINS= [
     'http://localhost:5173',
 ]
 
+CORS_ALLOWED_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173"
+]
+
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_CAPITAL_REQUIRED = False
@@ -196,28 +202,4 @@ APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 SCHEDULER_DEFAULT=True
 
 
-#---------------------------------------------------Celery-------------------------------------------------------
 
-# from celery import shared_task
-# from celery.schedules import crontab
-# from celery import Celery
-
-# CELERY_BROKER_URL = 'redis://localhost:6379/0'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESUTL_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'KST'
-# #Asia/Seoul
-
-# app = Celery('financial_project')
-
-# app.config_from_object('django.conf:settings', namespace='CELERY')
-# app.autodiscover_tasks()
-
-# CELERY_BEAT_SCHEDULE = {
-#     'run-every-morning': {
-#         'task': 'financial_product.tasks.my_task',
-#         'schedule': crontab(hour=10, minute=15),  # 매일 오전 1시에 실행
-#     },
-# }

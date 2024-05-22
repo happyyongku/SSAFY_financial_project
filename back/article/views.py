@@ -10,37 +10,45 @@ from .serializers import ArticleListSerializer, ArticleSerializer, CommentSerial
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 def article_list(request):
-    if request.method == 'GET':
-        articles = Article.objects.all()
-        serializer = ArticleListSerializer(articles, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request.method == 'POST':
-        serializer = ArticleSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save(user=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    try:
+        if request.method == 'GET':
+            articles = Article.objects.all()
+            serializer = ArticleListSerializer(articles, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'POST':
+            serializer = ArticleSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save(user=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        print(request.user)
+        print(e)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET','DELETE', 'PUT'])
 def articles_detail(request, article_pk):
-    article = Article.objects.get(pk=article_pk)
-    if request.method == 'GET':
-        serializer = ArticleSerializer(article)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    elif request.method == 'DELETE':
-        article.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = ArticleSerializer(article, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
+    try:
+        article = Article.objects.get(pk=article_pk)
+        if request.method == 'GET':
+            serializer = ArticleSerializer(article)
             return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'DELETE':
+            article.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        elif request.method == 'PUT':
+            serializer = ArticleSerializer(article, data=request.data, partial=True)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def comments_list(request, article_pk):
     if request.method == 'GET':
-        comments = Article.comment_set.filter(pk=article_pk)
+        article = Article.objects.get(pk=article_pk)
+        comments = article.comment_set.all()
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
         
