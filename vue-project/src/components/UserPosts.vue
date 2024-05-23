@@ -1,13 +1,18 @@
 <template>
   <div>
     <h1>User Posts</h1>
-    <ul>
-      <li v-for="post in userPosts" :key="post.id">
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
-        <p>작성일: {{ post.created_at }}</p>
-      </li>
-    </ul>
+    <div v-if="userPosts.length > 0">
+      <ul>
+        <li v-for="post in userPosts" :key="post.id">
+          <h2>{{ post.title }}</h2>
+          <p>{{ post.content }}</p>
+          <p>작성일: {{ post.created_at }}</p>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h3>작성한 게시글이 없습니다.</h3>
+    </div>
   </div>
 </template>
 
@@ -21,12 +26,15 @@ const userPosts = ref([]);
 const token = computed(()=>{
     return store.token
 })
+const userId = computed(() => {
+  return store.userId
+})
 
 onMounted(() => {
   // 유저가 작성한 게시글을 가져오는 API 요청
   axios({
     method: 'get',
-    url: `${store.API_URL}/user-posts/`, // 유저가 작성한 게시글을 가져오는 엔드포인트로 수정 필요
+    url: `http://127.0.0.1:8000/article/articles/${store.userId}/`, // 유저가 작성한 게시글을 가져오는 엔드포인트로 수정 필요
     headers: {
       Authorization: `Token ${token.value}`,
     },
