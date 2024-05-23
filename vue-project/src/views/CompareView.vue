@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <h1 @click="selectInitialize">예적금 금리 비교</h1>
+  <div class="m-3 compare-product">
+    <h3 @click="selectInitialize">◎ 예적금 금리 비교</h3>
     <button @click="selectInitialize">초기화</button>
     <ProductType v-if="!store.selectedType" @typeSelect="handleType"/>
-    <div class="d-flex flex-row justify-content-evenly" v-if="store.selectedType">
+    <div class="d-flex flex-row justify-content-evenly table-container" v-if="store.selectedType">
       <div>
         <h2>상품 1</h2>
         <BankList 
@@ -164,5 +164,23 @@
 </script>
 
 <style scoped>
+h3 {
+  font-family: Georgia, serif;
+}
 
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    max-height: 600px;
+    overflow: auto;
+    border: 1px solid #ddd;
+    padding-bottom: 10px;
+    text-align: center;
+    background-color: #8C7C68;
+}
+
+
+.compare-product {
+  width: 90%;
+}
 </style>

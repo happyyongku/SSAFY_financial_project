@@ -116,6 +116,7 @@ thead th {
     top:0;
     background-color: #f9f9f9;
     z-index: 1;
+    background-color: #faedad;
 }
 thead tr {
     border: 1px solid;

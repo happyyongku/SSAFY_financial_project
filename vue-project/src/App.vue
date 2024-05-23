@@ -4,7 +4,7 @@
       <nav class="navbar navbar-expand-lg bg-custom-navbar">
         <div class="container-fluid">
           <a class="navbar-brand px-2" href="/">
-            <img src="@/assets/yg.jpg" alt="Logo" width="60" height="30" class="d-inline-block align-text-top ">
+            <img src="@/assets/yg.png" alt="Logo" width="60" height="30" class="d-inline-block align-text-top ">
           </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -50,6 +50,31 @@
       </nav>
     </header>
     <RouterView/>
+    <footer class="py-5 fixed-bottom" style="background-color: #734217;">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright YG Financial. All Rights Reserved.</p>
+            <div class="d-flex justify-content-end">
+            <a href="https://www.ssafy.com/ksp/jsp/swp/swpMain.jsp">
+              <img src="@/assets/home_page.png" alt="homepage img" style="width: 25px; height: 25px; border: solid black 1px; border-radius: 10%; margin: 5px; background-color: white;">
+            </a>
+            <a href="https://www.facebook.com/hellossafy">
+              <img src="@/assets/facebook.png" alt="facebook img" style="width: 25px; height: 25px; border: solid black 1px; border-radius: 10%; margin: 5px; background-color: white;">
+            </a>
+            <a href="https://www.instagram.com/jeong90_97/">
+              <img src="@/assets/instagram.png" alt="instagram img" style="width: 25px; height: 25px; border: solid black 1px; border-radius: 10%; margin: 5px; background-color: white;">
+            </a>
+            <a href="https://www.youtube.com/channel/UC_XI3ByFO1uZIIH-g-zJZiw/featured">
+              <img src="@/assets/youtube.png" alt="youtube img" style="width: 25px; height: 25px; border: solid black 1px; border-radius: 10%; margin: 5px; background-color: white;">
+            </a>
+            <a href="https://pf.kakao.com/_Vhxoxnxb">
+              <img src="@/assets/kakao.png" alt="kakao img" style="width: 25px; height: 25px; border: solid black 1px; border-radius: 10%; margin: 5px; background-color: white;">
+            </a>
+            <a href="https://www.notion.so/62e62adb6dc04794a74009c54b3791a9?v=56c520a058ef49cd9405cb80d1274585">
+              <img src="@/assets/notion.png" alt=" img" style="width: 25px; height: 25px; border: solid black 1px; border-radius: 10%; margin: 5px; background-color: white;">
+          </a>
+          </div>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -84,6 +109,9 @@ const store = useCounterStore()
   text-decoration: none; 
 }
 
+*h3 {
+  font-family: 'Century Gothic', sans-serif; 
+}
 </style>
 <style src="@/assets/styles.css">
   

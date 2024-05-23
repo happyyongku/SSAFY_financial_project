@@ -12,6 +12,10 @@
                 </div>
             </div>
             <nav class="d-flex p-3 justify-content-evenly " id="nav-icon">
+                <div class="flex-column text-center" @click="goToList">
+                    <img src="@/assets/checklist_icon.png" alt="checklist-icon" id="icon" style="width: 100px; height: 146.25px;">
+                    <p class="m-2" id="nav-icon-text">금융 상품 목록</p>
+                </div>
                 <div class="flex-column text-center" @click="goToCompare">
                     <img src="@/assets/product_compare_icon.png" alt="compare-icon" id="icon">
                     <p class="m-2" id="nav-icon-text">금융 상품 비교</p>
@@ -43,6 +47,9 @@ import CurrentChart from '@/components/CurrentChart.vue'
 import CurrentGraph from '@/components/CurrentGraph.vue'
 
 const router = useRouter()
+const goToList = function(){
+    router.push({name:"ReadProductView"})
+}
 const goToCompare = function(){
     router.push({name:"CompareView"})
 }

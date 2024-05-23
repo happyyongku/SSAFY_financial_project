@@ -1,9 +1,9 @@
 
 <template>
-<h1>UserProfile</h1>
+<h3>나의 프로필</h3>
   <div class="profile-container">
-    <div class="card custom-border" style="width: 18rem;">
-      <img src="@/assets/yonggu.png" class="card-img-top" alt="user image">
+    <div class="card border border-3 p-3" style="width: 18rem;">
+      <img src="@/assets/user.png" class="card-img-top" alt="user image">
       <div class="card-body">
         <h3 class="card-title">유저 프로필</h3>
         <p class="card-text">.</p>
@@ -50,8 +50,5 @@ const confirmSignOut = () => {
   height: 100vh;
   text-align: center;
 }
-.custom-border {
-  border: 2px solid #D6B534;
-  margin: 2px;
-}
+
 </style>

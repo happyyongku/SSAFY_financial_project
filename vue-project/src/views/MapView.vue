@@ -1,15 +1,23 @@
- <template>
-  <div>
-    <h1 class="ercword">내 집 주변 은행 검색</h1>
-    <div class="container custom-border">
+<template>
+  <div class="m-3">
+    <h3>◎ 내 집 주변 은행 검색</h3>
+    <div class="container border border-3 p-3">
       <div id="map" class="map"></div>
       <div id="menu_wrap" class="bg_white">
         <div class="option">
-          <div>
-            <input type="text" id="keyword" size="15" placeholder="키워드 입력" class="custom-border" />
-            <input type="text" id="region" size="15" placeholder="지역 입력" class="custom-border" />
-            <button @click="searchPlaces" class="custom-border">검색하기</button>
-            <button @click="toggleMapType" class="custom-border">지도 타입 변경</button>
+          <div class="input-container"> <!-- 수정된 부분 -->
+            <div>
+              <input type="text" id="keyword" size="15" placeholder="키워드 입력" class="border border-3 p-3" />
+            </div>
+            <div>
+              <input type="text" id="region" size="15" placeholder="지역 입력" class="border border-3 p-3" />
+            </div>
+            <div>
+              <button @click="searchPlaces">검색하기</button>
+            </div>
+            <div>
+              <button @click="toggleMapType">지도 타입 변경</button>
+            </div>
           </div>
         </div>
         <ul id="placesList"></ul>
@@ -236,12 +244,40 @@ export default {
   color: #007bff;
 }
 
-.ercword{
-    color: #D6B534;
+h3 {
+    font-family: Georgia, serif;
+  }
+
+button {
+  border: solid black 1px;
+  margin: auto;
 }
 
-.custom-border {
-  border: 2px solid #D6B534;
-  margin: 2px;
+.option {
+  display: flex;
+  flex-direction: column; /* 세로 방향으로 정렬 */
 }
+
+.input-container > div {
+  margin-bottom: 10px; /* 각 요소 사이의 간격 설정 */
+}
+
+.input-container input,
+.input-container button {
+  margin-bottom: 5px; /* input과 button 사이의 간격 설정 */
+}
+
+
+.container {
+  font-family: 'Century Gothic', sans-serif; 
+}
+
+.border {
+  border: 1px solid #ddd;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
 </style>

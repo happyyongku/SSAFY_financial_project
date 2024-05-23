@@ -1,4 +1,7 @@
 <template>
+    <div class="m-3">
+        <h3>◎ 챗봇을 이용한 상품 추천</h3>
+    </div>
     <body>
         <div id="chat-container">
             <div id="chat-messages">
@@ -155,7 +158,7 @@
     body {
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: top;
         height: 100vh;
         margin: 0;
     }

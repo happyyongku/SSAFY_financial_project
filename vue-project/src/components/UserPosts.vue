@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h1>User Posts</h1>
+    <h3>나의 게시글</h3>
     <ul>
       <li v-for="post in userPosts" :key="post.id">
-        <h2>{{ post.title }}</h2>
+        <h4>{{ post.title }}</h4>
         <p>{{ post.content }}</p>
         <p>작성일: {{ post.created_at }}</p>
       </li>
@@ -38,5 +38,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 스타일링 추가 */
+
 </style>
