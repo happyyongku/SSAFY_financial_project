@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -95,12 +96,14 @@ WSGI_APPLICATION = 'financial_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+DB_PASSWORD = env('DB_PASSWORD')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'SSAFY_final',
         'USER': 'yonggu97',
-        'PASSWORD': env('DB_PASSWORD'),
+        'PASSWORD': DB_PASSWORD,
         'HOST': 'localhost', # MySQL 호스트
         'PORT': '3306',      # MySQL 포트 (기본값은 3306)
     }
@@ -172,6 +175,12 @@ CORS_ALLOWED_ORIGINS= [
     'http://localhost:5173',
 ]
 
+CORS_ALLOWED_CREDENTIALS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173"
+]
+
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_CAPITAL_REQUIRED = False
@@ -186,23 +195,11 @@ ACCOUNT_ADAPTER = 'accounts.models.CustomAccountAdapter'
 
 API_KEY_EXCHANGE = env('API_KEY_EXCHANGE')
 API_KEY_FINANCIAL = env('API_KEY_FINANCIAL')
+API_KEY_AI = env('API_KEY_GPT')
+
+# ------------------ apscheduler ------------------------
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+SCHEDULER_DEFAULT=True
 
 
-#---------------------------------------------------Celery-------------------------------------------------------
 
-from celery import shared_task
-from celery.schedules import crontab
-
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESUTL_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Seoul'
-
-CELERY_BEAT_SCHEDULE = {
-    'run-every-morning': {
-        'task': 'myapp.tasks.my_task',
-        'schedule': crontab(hour=1, minute=0),  # 매일 오전 1시에 실행
-    },
-}

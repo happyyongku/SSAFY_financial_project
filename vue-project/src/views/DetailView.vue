@@ -1,50 +1,111 @@
 <template>
-  <div>
-    <h1>DetailView</h1>
-    <div v-if="article">
-      <p>{{ article.id }}</p>
-      <p>{{ article.title }}</p>
-      <p>{{ article.content }}</p>
-      <p>{{ article.created_at }}</p>
-      <p>{{ article.updated_at }}</p>
+  <div class="m-4">
+    <h1 class="noto">게시글 상세보기</h1>
+    <div v-if="article" class="my-3">
+      <p>{{ article.id }}번 게시글</p>
+      <p>제목: {{ article.title }}</p>
+      <p>내용: {{ article.content }}</p>
     </div>
-    <div v-if="comments.length">
+    <div v-if="comments.length > 0">
       <h2>Comments</h2>
-      <div v-for="comment in comments" :key="comment.id" class="comment-card">
-        <p>{{ comment.content }}</p>
-        <p>by {{ comment.author }}</p>
+      <div class="comment-card">
+        <ul v-for="comment in comments" :key="comment.id" >
+          <li>{{ comment.content }}</li>
+        </ul>
       </div>
     </div>
     <div v-else>
       <p>No comments found.</p>
     </div>
+    <form @submit.prevent="updateComment">
+      <input type="text" v-model="commentContent">
+      <input type="submit" value="댓글 등록">
+    </form>
+    <button @click="switchEdit" 
+    v-if="!editType && (article?.user === store.userInfo.pk)"
+    >수정</button>
+    <div class="w-50">
+      <ArticleEdit v-if="editType" :article-id="article.id" @switchType="switchEdit"/>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import { useCounterStore } from '@/stores/counter';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import ArticleEdit from '@/components/ArticleEdit.vue';
 
 const store = useCounterStore();
 const route = useRoute();
+const router = useRouter();
 const article = ref(null);
 const comments = ref([]);
+const editType = ref(false)
+const token = computed(()=>{
+  return store.token
+})
+const API_URL = 'http://127.0.0.1:8000'
 
-onMounted(() => {
+const props = defineProps({
+  articleItem:Object
+})
+
+const commentContent = ref('')
+
+const switchEdit = () => {
+  editType.value = editType.value === true? false:true
+};
+
+const updateComment = ()=>{
+  axios({
+    url:`http://127.0.0.1:8000/article/articles/${article.value.id}/comments/`,
+    method:'POST',
+    data: {
+      content: commentContent.value,
+      userId: store.userId
+    }
+  })
+  .then(response => {
+    console.log(response)
+  })
+  .catch(err => {
+    console.log(err)
+  })
+}
+
+onMounted(async () => {
+  console.log('dd')
+  
+  await axios({
+    url: `${API_URL}/article/articles/${route.params.id}/`,
+    method:'get',
+    headers: {
+      Authorization:`Token ${token.value}`
+    }
+  })
+  .then(response => {
+    console.log(response)
+    article.value = response.data
+  })
+  .catch(error => {
+    console.log(`article error : ${error}`)
+  })
+
   axios({
     method: 'get',
-    url: `${store.API_URL}/api/v1/articles/${route.params.id}/`,
+    url: `${API_URL}/article/articles/${route.params.id}/comments/`,
+    headers: {
+      Authorization:`Token ${token.value}`
+    }
   })
     .then((response) => {
-      article.value = response.data;
+      comments.value = response.data;
     })
     .catch((error) => {
-      console.log(error);
+      console.error('Error fetching article:', error);
     });
-
-  store.getComments(route.params.id);
-  comments.value = store.comments;
 });
 </script>
 

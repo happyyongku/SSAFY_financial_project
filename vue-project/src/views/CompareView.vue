@@ -1,76 +1,78 @@
 <template>
-  <div>
-    <h1 @click="selectInitialize">예적금 금리 비교</h1>
-    <button @click="selectInitialize">초기화</button>
-    <ProductType v-if="!store.selectedType" @typeSelect="handleType"/>
-    <div class="d-flex flex-row justify-content-evenly" v-if="store.selectedType">
-      <div>
-        <h2>상품 1</h2>
-        <BankList 
-        v-if="store.selectedType" 
-        :bank-list="store.bankList" 
-        :my-item="1" 
-        @bankSelect="handleBank"
-        />
-        <ProductList 
-        v-if="store.selectedBank1 && !store.selectedProduct1" 
-        :product-list="store.productList1"
-        :my-item="1"
-        :type="store.selectedType"
-        @updateProduct="updateProduct"
-        />
-        <OptionList
-        v-if="store.selectedProduct1 && !store.selectedOption1"
-        :option-list="store.optionList1"
-        :my-item="1"
-        :type="store.selectedType"
-        :bank="store.bank1"
-        :product="store.product1"
-        @updateOption="updateOption"
-        />
-        <ProductCompare
-        v-if="store.selectedOption1"
-        :bank="store.bank1"
-        :product="store.product1"
-        :option="store.option1"
-        :type="store.selectedType"
-        />
+  <div class="d-flex justify-content-center">
+    <div class="m-3 compare-product">
+    <h3 @click="selectInitialize" class="noto"> 예적금 금리 비교</h3>
+      <button @click="selectInitialize" class="my-3">초기화</button>
+      <ProductType v-if="!store.selectedType" @typeSelect="handleType"/>
+      <div class="d-flex flex-row justify-content-evenly table-container" v-if="store.selectedType">
+        <div>
+          <h2>상품 1</h2>
+          <BankList 
+          v-if="store.selectedType" 
+          :bank-list="store.bankList" 
+          :my-item="1" 
+          @bankSelect="handleBank"
+          />
+          <ProductList 
+          v-if="store.selectedBank1 && !store.selectedProduct1" 
+          :product-list="store.productList1"
+          :my-item="1"
+          :type="store.selectedType"
+          @updateProduct="updateProduct"
+          />
+          <OptionList
+          v-if="store.selectedProduct1 && !store.selectedOption1"
+          :option-list="store.optionList1"
+          :my-item="1"
+          :type="store.selectedType"
+          :bank="store.bank1"
+          :product="store.product1"
+          @updateOption="updateOption"
+          />
+          <ProductCompare
+          v-if="store.selectedOption1"
+          :bank="store.bank1"
+          :product="store.product1"
+          :option="store.option1"
+          :type="store.selectedType"
+          />
+        </div>
+        <div>
+          <h2>상품 2</h2>
+          <BankList 
+          v-if="store.selectedType" 
+          :bank-list="store.bankList" 
+          :my-item="2" 
+          @bankSelect="handleBank"
+          />
+          <ProductList 
+          v-if="store.selectedBank2 && !store.selectedProduct2" 
+          :product-list="store.productList2"
+          :my-item="2"
+          :type="store.selectedType"
+          @updateProduct="updateProduct"
+          />
+          <OptionList
+          v-if="store.selectedProduct2 && !store.selectedOption2"
+          :option-list="store.optionList2"
+          :my-item="2"
+          :type="store.selectedType"
+          :bank="store.bank2"
+          :product="store.product2"
+          @updateOption="updateOption"
+          />
+          <ProductCompare
+          v-if="store.selectedOption2"
+          :bank="store.bank2"
+          :product="store.product2"
+          :option="store.option2"
+          :type="store.selectedType"
+          />
+  
+        </div>
       </div>
-      <div>
-        <h2>상품 2</h2>
-        <BankList 
-        v-if="store.selectedType" 
-        :bank-list="store.bankList" 
-        :my-item="2" 
-        @bankSelect="handleBank"
-        />
-        <ProductList 
-        v-if="store.selectedBank2 && !store.selectedProduct2" 
-        :product-list="store.productList2"
-        :my-item="2"
-        :type="store.selectedType"
-        @updateProduct="updateProduct"
-        />
-        <OptionList
-        v-if="store.selectedProduct2 && !store.selectedOption2"
-        :option-list="store.optionList2"
-        :my-item="2"
-        :type="store.selectedType"
-        :bank="store.bank2"
-        :product="store.product2"
-        @updateOption="updateOption"
-        />
-        <ProductCompare
-        v-if="store.selectedOption2"
-        :bank="store.bank2"
-        :product="store.product2"
-        :option="store.option2"
-        :type="store.selectedType"
-        />
-
-      </div>
+      
     </div>
-    
   </div>
 </template>
 
@@ -164,5 +166,29 @@
 </script>
 
 <style scoped>
+h3 {
+  font-family: Georgia, serif;
+}
 
+.table-container {
+    width: 100%;
+    max-width: 100%;
+    max-height: 600px;
+    overflow: auto;
+    border: 1px solid #ddd;
+    padding-bottom: 10px;
+    text-align: center;
+    background-color: #a59581;
+    border-radius: 20px;
+}
+
+.noto {
+    font-family: "Noto Sans KR", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+.compare-product {
+  width: 90%;
+
+}
 </style>

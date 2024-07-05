@@ -1,10 +1,14 @@
 <template>
   <div>
-    <h1>게시글</h1>
-    <RouterLink :to="{ name: 'CreateView' }">
-      [CREATE]
-    </RouterLink>
-    <ArticleList />
+    <div class="d-flex flex-column align-items-center w-75">
+      <div>
+        <h1>게시글</h1>
+      <RouterLink :to="{ name: 'CreateView' }">
+        [CREATE]
+      </RouterLink>
+      <ArticleList />
+      </div>
+    </div>
   </div>
 </template>
 

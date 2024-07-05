@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="list-div">
         <h3>Select Bank {{ myItem }}</h3>
         <form @submit.prevent="$emit('bankSelect', myItem, selected)">
             <select id="select-bank" @change="selectChange($event)" v-model="selected">
@@ -25,5 +25,9 @@
 </script>
 
 <style scoped>
+.list-div {
+    background-color: #a59581;
+    font-family: 'Century Gothic', sans-serif; 
+}
 
 </style>

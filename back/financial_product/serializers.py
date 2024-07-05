@@ -5,8 +5,6 @@ from .models import (
     DepositProduct, 
     InstallmentSavingOption,
     InstallmentSavingProduct,
-    PensionOption,
-    PensionProduct,
     ExchangRate
     )
 
@@ -40,17 +38,6 @@ class InstallmentSavingOptionSerializer(serializers.ModelSerializer):
         model=InstallmentSavingOption
         fields='__all__'
         
-class PensionProductSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model=PensionProduct
-        fields='__all__'
-        
-class PensionOptionSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model=PensionOption
-        fields='__all__'
         
 class ExchangeRateSerializer(serializers.ModelSerializer):
     

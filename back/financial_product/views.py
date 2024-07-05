@@ -5,7 +5,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 import pandas as pd
+from openai import OpenAI
 from datetime import date, datetime, timedelta
+import pymysql
+import json
 from .models import (
     FinancialCompany, 
     DepositOption, 
@@ -22,6 +25,8 @@ from .serializers import (
     InstallmentSavingProductSerializer,
     ExchangeRateSerializer
 )
+
+chat_history = []
 
 # Create your views here.
 
@@ -101,6 +106,76 @@ def get_financial_data(request):
                             'intr_rate2': option['intr_rate2'],
                             'dcls_month': option['dcls_month']
                         }
+                        # try:
+                        try:
+                            DepositProduct.objects.filter(
+                                fin_prdt_cd=option['fin_prdt_cd']
+                                ).update(intr_rate_type_nm=option['intr_rate_type_nm'])
+                        except:
+                            pass
+                            
+                        if option['save_trm'] == '1':
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_1=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_1_p=float(option['intr_rate2']))
+                            except:
+                                pass
+                        elif option['save_trm'] == '3':
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_3=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_3_p=float(option['intr_rate2']))
+                            except:
+                                pass
+
+                        elif option['save_trm'] == '6':
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_6=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_6_p=float(option['intr_rate2']))
+                            except:
+                                pass
+
+                        elif option['save_trm'] == '12':
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_12=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_12_p=float(option['intr_rate2']))
+                            except:
+                                pass
+
+                        elif option['save_trm'] == '24':
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_24=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_24_p=float(option['intr_rate2']))
+                            except:
+                                pass
+
+                        elif option['save_trm'] == '36':
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_36=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                DepositProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_3_p=float(option['intr_rate2']))
+                            except:
+                                pass
+
+                        # except:
+                        #     print('ERROR!')
+                        #     pass
                         try:
                             DepositOption.objects.update_or_create(
                                 fin_prdt_cd = product_dps_opt,
@@ -173,6 +248,78 @@ def get_financial_data(request):
                             'rsrv_type_nm': option['rsrv_type_nm'],
                             'dcls_month': option['dcls_month'],
                         }
+                        # try:
+                        try:
+                            InstallmentSavingProduct.objects.filter(
+                                fin_prdt_cd=option['fin_prdt_cd']
+                                ).update(intr_rate_type_nm=option['intr_rate_type_nm'])
+                        except:
+                            pass
+                        
+                        if option['save_trm'] == '1':
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_1=float(option['intr_rate']))
+                                print(InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']))
+                            except:
+                                pass
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_1_p=float(option['intr_rate2']))
+                            except:
+                                pass
+                            
+                        elif option['save_trm'] == '3':
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_3=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_3_p=float(option['intr_rate2']))
+                            except:
+                                pass
+                            
+                        elif option['save_trm'] == '6':
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_6=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_6_p=float(option['intr_rate2']))
+                            except:
+                                pass
+                            
+                        elif option['save_trm'] == '12':
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_12=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_12_p=float(option['intr_rate2']))
+                            except:
+                                pass
+                            
+                        elif option['save_trm'] == '24':
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_24=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_24_p=float(option['intr_rate2']))
+                            except:
+                                pass
+                            
+                        elif option['save_trm'] == '36':
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_36=float(option['intr_rate']))
+                            except:
+                                pass
+                            try:
+                                InstallmentSavingProduct.objects.filter(fin_prdt_cd=option['fin_prdt_cd']).update(rate_36_p=float(option['intr_rate2']))
+                            except:
+                                pass
+                            
+                        # except:
+                        #     print('ERROR')
+                        #     pass
                         try:
                             InstallmentSavingOption.objects.update_or_create(
                                 fin_prdt_cd = product_ins_opt,
@@ -323,4 +470,140 @@ def get_option_list(request, type, product_id):
         options = product.installmentsavingoption_set.all()
         serializer = InstallmentSavingOptionSerializer(options, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def fetch_product(request, type):
+    print('/////////////////')
+    if type=='deposit':
+        deposits = DepositProduct.objects.all()
+        serializer = DepositProductSerializer(deposits, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif type=='installment':
+        installment = InstallmentSavingProduct.objects.all()
+        serializer = InstallmentSavingProductSerializer(installment, many=True)
+        return Response(serializer, status=status.HTTP_200_OK)
+
+
+# DB 내의 상품과 옵션 데이터를 fixture (json이나 csv)로 만들고 아래 코드로 읽어서 bank_info에 넣기
+# DB 데이터를 읽어와서 ai한테 줄 리스트로 만들기
+company_info = []
+deposit_info = []
+installment_info = []
+# with open('파일경로', 'r', encoding='utf-8') as f :
+#     text = f.read()
+# import pymysql
+conn = pymysql.connect(
+    host='localhost',
+    user='yonggu97',
+    password = settings.DB_PASSWORD,
+    db = 'ssafy_final'
+)
+cursor = conn.cursor()
+db_list = [
+    'financial_product_financialcompany',
+    'financial_product_depositproduct',
+    'financial_product_installmentsavingproduct'
+    ]
+
+for db in db_list:
+    if 'company' in db:
+        cursor.execute(f"SELECT * FROM {db}")
+    else :
+        cursor.execute(f'SELECT kor_co_nm,  mtrt_int FROM {db}')
         
+    rows = cursor.fetchall()
+    columns = [description[0] for description in cursor.description]
+    df = pd.DataFrame(rows, columns=columns)
+    json_data = df.to_json(orient='records', force_ascii=False)
+    if 'company' in db:
+        company_info.extend(json.loads(json_data))
+    elif 'deposit' in db:
+        deposit_info.extend(json.loads(json_data))
+    elif 'installment' in db:
+        installment_info.extend(json.loads(json_data))
+
+conn.close()
+
+
+@api_view(['GET'])
+def chatAI(request):
+    global chat_history
+    print('//////')
+    API_KEY = settings.API_KEY_AI
+    print(API_KEY)
+    client = OpenAI(api_key=API_KEY)
+    input_message = request.query_params.get('message','')
+    print(input_message)
+    #아래 정보에 기반해서 답변해줘야해 {bank_info}
+    chat_history.extend(
+        [
+            {"role": "user", "content": f"{input_message}"},
+            {"role": "system", "content": f"반드시 한글로 대답해줘."}
+        ] 
+    )
+    
+    if '은행' in input_message and '추천' in input_message:
+        print(company_info[0])
+        chat_history.append(
+            {"role": "system", "content": f"만약 은행을 추천한다면 아래 정보에 기반해서 한글로 답변해줘. {company_info}"}
+        )
+    if '예금' in input_message and '추천' in input_message:
+        chat_history.append(
+            {"role": "system", "content": f"만약 예금 상품을 추천한다면 아래 정보에 기반해서 예금 상품의 이름과 함께 정보를 한글로 답변해줘. {deposit_info} 예금 상품의 이름은 각 딕셔너리 내의 'fin_prdt_nm'의 값이야." }
+        )
+    if '적금' in input_message and '추천' in input_message:
+        chat_history.append(
+            {"role": "system", "content": f"만약 적금 상품을 추천한다면 아래 정보에 기반해서 적금 상품의 이름과 함께 정보를 한글로 답변해줘. {installment_info} 적금 상품의 이름은 각 딕셔너리 내의 'fin_prdt_nm'의 값이야."}
+        )
+    print('중간지점')
+    try:
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            temperature=0.0,
+            # response_format={'type':'json_object'},
+            messages= chat_history,
+            stop=['Human'],
+            frequency_penalty=0.5,
+            presence_penalty=0.5
+        )
+        output_message = response.choices[0].message.content
+        print(output_message)
+        chat_history.append({"role": "assistant", "content": f"{output_message}"})
+        return Response(output_message,status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response({'error': str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+def history_initialize(request):
+    global chat_history
+    chat_history = []
+    return Response(status=status.HTTP_202_ACCEPTED)
+
+@api_view(['GET'])
+def read_product(request, type):
+    try:
+        if type == 'deposit':
+            item = DepositProduct.objects.all()
+            serializer = DepositProductSerializer(item, many=True)
+        elif type == 'installment':
+            item=InstallmentSavingProduct.objects.all()
+            serializer = InstallmentSavingProductSerializer(item, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        print(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET'])
+def fetch_exchange(request):
+    today = date.today()
+    print(today)
+    data = ExchangRate.objects.filter(date=today)
+    serializer = ExchangeRateSerializer(data, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def fetch_exchange_unit(request, unit):
+    data = ExchangRate.objects.filter(cur_unit=unit)
+    serializer = ExchangeRateSerializer(data, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
